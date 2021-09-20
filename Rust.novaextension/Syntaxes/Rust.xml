@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<syntax name="rust">
+  <meta>
+    <name>Rust</name>
+    <type>compiled</type>
+    <preferred-file-extension>rs</preferred-file-extension>
+  </meta>
+  
+  <detectors>
+    <extension priority="1.0">rs</extension>
+  </detectors>
+  
+  <indentation>
+    <increase>
+      <expression>(\{[^}\"']*$)|(\[[^\]\"']*$)|(\([^)\"']*$)</expression>
+    </increase>
+    <decrease>
+      <expression>^\s*(\s*/\*.*\*/\s*)*[\}\]\)\\]</expression>
+    </decrease>
+  </indentation>
+  
+  <comments>
+    <single>
+      <expression>//</expression>
+    </single>
+    <multiline>
+      <starts-with>
+        <expression>/*</expression>
+      </starts-with>
+      <ends-with>
+        <expression>*/</expression>
+      </ends-with>
+    </multiline>
+  </comments>
+  
+  <brackets>
+    <pair open="{" close="}" />
+    <pair open="[" close="]" />
+    <pair open="(" close=")" />
+    <pair open="&lt;" close="&gt;" />
+  </brackets>
+  
+  <surrounding-pairs>
+    <pair open="{" close="}" />
+    <pair open="[" close="]" />
+    <pair open="(" close=")" />
+    <pair open="&lt;" close="&gt;" />
+    <pair open="&quot;" close="&quot;" />
+    <pair open="r#&quot;" close="&quot;#" />
+  </surrounding-pairs>
+  
+  <scopes>
+    <include syntax="self" collection="comments" />
+    <include syntax="self" collection="types" />
+    <include syntax="self" collection="values" />
+  </scopes>
+  
+  <collections>
+    <!-- Comments -->
+    <collection name="comments">
+      <scope name="comment.single.rust">
+        <expression>//(?:$|([^/!].*)$)</expression>
+        <capture number="1" name="comment.single.content.rust" />
+      </scope>
+      <scope name="comment.multiline.rust">
+        <symbol type="comment">
+          <context behavior="subtree" />
+        </symbol>
+        <starts-with>
+          <expression>/\*</expression>
+        </starts-with>
+        <ends-with>
+          <expression>\*/</expression>
+        </ends-with>
+      </scope>
+      <scope name="string.docstring.rust">
+        <expression>//[/!](.*)$</expression>
+        <capture number="1" name="string.docstring.content.rust" />
+      </scope>
+    </collection>
+    
+    <!-- Types -->
+    <collection name="types">
+      <scope name="identifier.type.core.rust">
+        <strings>
+          <string>bool</string>
+          <string>char</string>
+          <string>f32</string>
+          <string>f64</string>
+          <string>i8</string>
+          <string>i16</string>
+          <string>i32</string>
+          <string>i64</string>
+          <string>i128</string>
+          <string>isize</string>
+          <string>str</string>
+          <string>u8</string>
+          <string>u16</string>
+          <string>u32</string>
+          <string>u64</string>
+          <string>u128</string>
+          <string>usize</string>
+        </strings>
+      </scope>
+    </collection>
+    
+    <!-- Values -->
+    <collection name="values">
+      <scope name="string.rust">
+        <starts-with>
+          <expression>&quot;</expression>
+        </starts-with>
+        <ends-with>
+          <expression>&quot;</expression>
+        </ends-with>
+        <subscopes>
+          <scope name="string.escaped.rust">
+            <expression>\\[\\&quot;]</expression>
+          </scope>
+        </subscopes>
+      </scope>
+      <scope name="string.raw.rust">
+        <starts-with>
+          <expression>\br&quot;</expression>
+        </starts-with>
+        <ends-with>
+          <expression>&quot;</expression>
+        </ends-with>
+      </scope>
+      <scope name="string.raw.quote.rust">
+        <starts-with>
+          <expression>\br\#+&quot;</expression>
+        </starts-with>
+        <ends-with>
+          <expression>&quot;\#+</expression>
+        </ends-with>
+      </scope>
+      <scope name="string.char.rust">
+        <expression>&apos;(.)&apos;</expression>
+        <capture number="1" name="value.char.rust" />
+      </scope>
+      
+      <scope name="value.boolean.rust">
+        <strings>
+          <string>true</string>
+          <string>false</string>
+        </strings>
+      </scope>
+      <scope name="value.number.float.rust">
+        <expression>\b-?[0-9]+(?:\.[0-9]+)?(?:f32|f64)?\b</expression>
+      </scope>
+      <scope name="value.number.integer.rust">
+          <expression>\b-?[0-9][0-9_]*(?:[iu](?:8|16|32|64|128|size))?\b</expression>
+      </scope>
+      <scope name="value.number.hexadecimal.rust">
+        <expression>\b0[xX][a-fA-F0-9]+\b</expression>
+      </scope>
+      <scope name="value.number.octal.rust">
+        <expression>\b0[0-7]+\b</expression>
+      </scope>
+    </collection>
+    
+  </collections>
+</syntax>

@@ -1,0 +1,24 @@
+{
+  "identifier": "com.kilb.Rust",
+  "name": "Rust",
+  "organization": "Drew Kilb",
+  "description": "Lorem ipsum, dolor sit amet.",
+  "version": "1.0",
+  "categories": ["languages"],
+
+  "main": "main.js",
+
+  "entitlements": {
+    "process": true,
+    "filesystem": "readonly"
+  },
+
+  "config": [
+    {
+      "key": "com.kilb.rust.language-server-path",
+      "title": "Language Server Path",
+      "type": "path",
+      "placeholder": "/usr/local/bin/example"
+    }
+  ]
+}
