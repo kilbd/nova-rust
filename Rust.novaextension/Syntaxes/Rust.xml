@@ -53,6 +53,7 @@
     <include syntax="self" collection="blocks" />
     <include syntax="self" collection="comments" />
     <include syntax="self" collection="definitions" />
+    <include syntax="self" collection="identifiers" />
     <include syntax="self" collection="imports" />
     <include syntax="self" collection="processing" />
     <include syntax="self" collection="values" />
@@ -309,6 +310,87 @@
       </scope>
     </collection>
     
+    <!-- !Generics -->
+    <collection name="generics">
+      <scope name="generic.type.rust">
+        <starts-with>
+          <expression>&lt;</expression>
+          <capture number="0" name="bracket.generic.rust" />
+        </starts-with>
+        <ends-with>
+          <expression>&gt;</expression>
+          <capture number="0" name="bracket.generic.rust" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="generics" />
+          <include syntax="self" collection="lifetimes" />
+          <include syntax="self" collection="types" />
+          <scope name="punctuation.separator.rust">
+            <expression>,</expression>
+          </scope>
+        </subscopes>
+      </scope>
+    </collection>
+    
+    <!-- !Identifiers -->
+    <collection name="identifiers">
+      <scope name="rust.identifier.core.type.primitive">
+        <strings>
+          <string>bool</string>
+          <string>char</string>
+          <string>f32</string>
+          <string>f64</string>
+          <string>i8</string>
+          <string>i16</string>
+          <string>i32</string>
+          <string>i64</string>
+          <string>i128</string>
+          <string>isize</string>
+          <string>str</string>
+          <string>u8</string>
+          <string>u16</string>
+          <string>u32</string>
+          <string>u64</string>
+          <string>u128</string>
+          <string>usize</string>
+        </strings>
+      </scope>
+      <scope name="rust.identifier.core.type.enum">
+        <strings>
+          <string>Option</string>
+          <string>Some</string>
+          <string>None</string>
+          <string>Result</string>
+          <string>Ok</string>
+          <string>Err</string>
+        </strings>
+      </scope>
+      <scope name="rust.identifier.core.type.struct">
+        <strings>
+          <string>Box</string>
+          <string>Path</string>
+          <string>PathBuf</string>
+          <string>String</string>
+          <string>Vec</string>
+        </strings>
+      </scope>
+      <scope name="rust.identifier.property">
+        <expression>(?&lt;=\.)([a-zA-Z_\$][A-Za-z0-9_]*)\b(?!\()</expression>
+      </scope>
+      <scope name="rust.identifier.property.static">
+        <expression>(?&lt;=\:\:)([a-zA-Z_\$][A-Za-z0-9_]*)\b(?!\()</expression>
+      </scope>
+      <scope name="rust.identifier.method">
+        <expression>(?&lt;=\.)([a-zA-Z_\$][A-Za-z0-9_]*)(?=\()</expression>
+      </scope>
+      <scope name="rust.identifier.method.static">
+        <expression>(?&lt;=\:\:)([a-zA-Z_\$][A-Za-z0-9_]*)(?=\()</expression>
+      </scope>
+      <scope name="typescript.identifier.function">
+        <expression>(?&lt;!\.)((?:\b[a-zA-Z_]|\$)[A-Za-z0-9_]*)(?=\()</expression>
+      </scope>
+    </collection>
+    
     <!-- !Imports -->
     <collection name="imports">
       <scope name="rust.import">
@@ -352,28 +434,6 @@
         <capture number="1" name="rust.keyword.modifier.visibility" />
         <capture number="2" name="rust.keyword.statement.module" />
         <capture number="3" name="rust.identifier" />
-      </scope>
-    </collection>
-    
-    <!-- !Generics -->
-    <collection name="generics">
-      <scope name="generic.type.rust">
-        <starts-with>
-          <expression>&lt;</expression>
-          <capture number="0" name="bracket.generic.rust" />
-        </starts-with>
-        <ends-with>
-          <expression>&gt;</expression>
-          <capture number="0" name="bracket.generic.rust" />
-        </ends-with>
-        <subscopes>
-          <include syntax="self" collection="generics" />
-          <include syntax="self" collection="lifetimes" />
-          <include syntax="self" collection="types" />
-          <scope name="punctuation.separator.rust">
-            <expression>,</expression>
-          </scope>
-        </subscopes>
       </scope>
     </collection>
     
@@ -440,27 +500,6 @@
     
     <!-- !Types -->
     <collection name="types">
-      <scope name="identifier.core.type.rust">
-        <strings>
-          <string>bool</string>
-          <string>char</string>
-          <string>f32</string>
-          <string>f64</string>
-          <string>i8</string>
-          <string>i16</string>
-          <string>i32</string>
-          <string>i64</string>
-          <string>i128</string>
-          <string>isize</string>
-          <string>str</string>
-          <string>u8</string>
-          <string>u16</string>
-          <string>u32</string>
-          <string>u64</string>
-          <string>u128</string>
-          <string>usize</string>
-        </strings>
-      </scope>
       <scope name="identifier.type.rust">
         <expression>(\[)?([a-zA-Z_][a-zA-Z0-9_]*)(\])?</expression>
         <capture number="1" name="operator.array.bracket.rust" />
