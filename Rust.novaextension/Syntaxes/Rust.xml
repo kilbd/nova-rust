@@ -54,6 +54,7 @@
     <include syntax="self" collection="comments" />
     <include syntax="self" collection="definitions" />
     <include syntax="self" collection="imports" />
+    <include syntax="self" collection="processing" />
     <include syntax="self" collection="values" />
   </scopes>
   
@@ -381,6 +382,18 @@
       <scope name="decorator.lifetime.rust">
         <expression>&apos;[a-zA-Z_][a-zA-Z0-9_]*</expression>
         <capture number="0" name="identifier.decorator.lifetime.name.rust" />
+      </scope>
+    </collection>
+    
+    <!-- !Processing -->
+    <collection name="processing">
+      <scope name="rust.processing">
+        <starts-with>
+          <expression>\#\[</expression>
+        </starts-with>
+        <ends-with>
+          <expression>\]</expression>
+        </ends-with>
       </scope>
     </collection>
     
