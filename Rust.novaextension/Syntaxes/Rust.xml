@@ -50,6 +50,7 @@
   </surrounding-pairs>
   
   <scopes>
+    <include syntax="self" collection="blocks" />
     <include syntax="self" collection="comments" />
     <include syntax="self" collection="definitions" />
     <!-- <include syntax="self" collection="types" /> -->
@@ -57,6 +58,88 @@
   </scopes>
   
   <collections>
+    <!-- Arguments -->
+    <collection name="arguments">
+      <scope name="rust.arguments">
+        <starts-with>
+          <expression>\(</expression>
+          <capture number="0" name="rust.bracket" />
+        </starts-with>
+        <ends-with>
+          <expression>\)</expression>
+          <capture number="0" name="rust.bracket" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="argument-items" />
+        </subscopes>
+      </scope>
+    </collection>
+    
+    <!-- Argument Items -->
+    <collection name="argument-items">
+      <scope name="rust.separator.comma">
+        <expression>,</expression>
+      </scope>
+      <scope name="rust.argument.self">
+        <symbol type="argument" />
+        <expression>(&amp;)?(?:(mut)\s+)?\b(self)\b</expression>
+        <capture number="1" name="rust.operator.pointer" />
+        <capture number="2" name="rust.keyword.modifier" />
+        <capture number="3" name="rust.keyword.self" />
+      </scope>
+      <scope name="rust.argument">
+        <symbol type="argument" />
+        <starts-with>
+          <expression>(&amp;)?(?:(mut)\s+)?\b([a-zA-Z_][A-Za-z0-9_]*)\b</expression>
+          <capture number="1" name="rust.operator.pointer" />
+          <capture number="2" name="rust.keyword.modifier" />
+          <capture number="3" name="rust.identifier.argument.name" />
+        </starts-with>
+        <ends-with>
+          <expression>(?=\)|,)</expression>
+        </ends-with>
+        <subscopes>
+          <scope name="rust.argument.type">
+            <starts-with>
+              <expression>:</expression>
+            </starts-with>
+            <ends-with>
+              <expression>(?=\)|,)</expression>
+            </ends-with>
+            <subscopes>
+              <include syntax="self" collection="lifetimes" />
+              <include syntax="self" collection="types" />
+              <scope name="rust.argument.type.modifiers">
+                <expression>(&amp;)?(?:(mut)\s+)?</expression>
+                <capture number="1" name="rust.operator.pointer" />
+                <capture number="2" name="rust.keyword.modifier" />
+              </scope>
+            </subscopes>
+          </scope>
+        </subscopes>
+      </scope>
+    </collection>
+    
+    <!-- !Blocks -->
+    <collection name="blocks">
+      <scope name="rust.block">
+        <symbol type="block">
+          <context behavior="subtree" />
+        </symbol>
+        <starts-with>
+          <expression>\{</expression>
+          <capture number="0" name="rust.block.bracket" />
+        </starts-with>
+        <ends-with>
+          <expression>\}</expression>
+          <capture number="0" name="rust.block.bracket" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" />
+        </subscopes>
+      </scope>
+    </collection>
+    
     <!-- Comments -->
     <collection name="comments">
       <scope name="comment.single.rust">
@@ -192,6 +275,43 @@
           </scope>
         </subscopes>
       </scope>
+      <!-- Functions -->
+      <scope name="rust.definition.function">
+        <symbol type="function" />
+        <starts-with>
+          <expression>(?:\b(pub)\s+)?\b(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <capture number="1" name="rust.keyword.modifier.visibility" />
+          <capture number="2" name="rust.keyword.construct.function" />
+          <capture number="3" name="rust.identifier.function.name" />
+        </starts-with>
+        <ends-with />
+        <subscopes anchored="true">
+          <include syntax="self" collection="generics" optional="true" />
+          <include syntax="self" collection="arguments" />
+          <include syntax="self" collection="return-types" optional="true" />
+          <include syntax="self" collection="function-blocks" />
+        </subscopes>
+      </scope>
+    </collection>
+    
+    <!-- !Function Blocks -->
+    <collection name="function-blocks">
+      <scope name="rust.block">
+        <symbol type="block">
+          <context behavior="subtree" fold-type="function" />
+        </symbol>
+        <starts-with>
+          <expression>\{</expression>
+          <capture number="0" name="rust.bracket" />
+        </starts-with>
+        <ends-with>
+          <expression>\}</expression>
+          <capture number="0" name="rust.bracket" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" />
+        </subscopes>
+      </scope>
     </collection>
     
     <!-- Generics -->
@@ -221,6 +341,24 @@
       <scope name="decorator.lifetime.rust">
         <expression>&apos;[a-zA-Z_][a-zA-Z0-9_]*</expression>
         <capture number="0" name="identifier.decorator.lifetime.name.rust" />
+      </scope>
+    </collection>
+    
+    <!-- Return Types -->
+    <collection name="return-types">
+      <scope name="rust.return-type" optional="true">
+        <starts-with>
+          <expression>(\-&gt;)\s*(\()?</expression>
+          <capture number="1" name="rust.operator.return" />
+          <capture number="2" name="rust.bracket" />
+        </starts-with>
+        <ends-with>
+          <expression>(\)|(?=\{|\,|\;)|$</expression>
+          <capture number="1" name="rust.bracket" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="argument-items" />
+        </subscopes>
       </scope>
     </collection>
     
