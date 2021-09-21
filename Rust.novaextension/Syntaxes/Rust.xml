@@ -53,12 +53,12 @@
     <include syntax="self" collection="blocks" />
     <include syntax="self" collection="comments" />
     <include syntax="self" collection="definitions" />
-    <!-- <include syntax="self" collection="types" /> -->
+    <include syntax="self" collection="imports" />
     <include syntax="self" collection="values" />
   </scopes>
   
   <collections>
-    <!-- Arguments -->
+    <!-- !Arguments -->
     <collection name="arguments">
       <scope name="rust.arguments">
         <starts-with>
@@ -75,7 +75,7 @@
       </scope>
     </collection>
     
-    <!-- Argument Items -->
+    <!-- !Argument Items -->
     <collection name="argument-items">
       <scope name="rust.separator.comma">
         <expression>,</expression>
@@ -135,7 +135,7 @@
       </scope>
     </collection>
     
-    <!-- Comments -->
+    <!-- !Comments -->
     <collection name="comments">
       <scope name="comment.single.rust">
         <expression>//(?:$|([^/!].*)$)</expression>
@@ -158,9 +158,9 @@
       </scope>
     </collection>
     
-    <!-- Definitions -->
+    <!-- !Definitions -->
     <collection name="definitions">
-      <!-- Constant -->
+      <!-- !Constant -->
       <scope name="definition.constant.rust">
         <symbol type="constant" scope="local" />
         <expression>\b(let)\s+(?!mut\s)([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
@@ -170,7 +170,7 @@
         <capture number="4" name="identifier.type.rust" />
         <capture number="5" name="operator.rust" />
       </scope>
-      <!-- Variable -->
+      <!-- !Variable -->
       <scope name="definition.identifier.rust">
         <symbol type="variable" scope="local" />
         <expression>\b(let)\s+(mut)\s+([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
@@ -181,7 +181,7 @@
         <capture number="5" name="identifier.type.rust" />
         <capture number="6" name="operator.rust" />
       </scope>
-      <!-- Struct -->
+      <!-- !Struct -->
       <scope name="definition.struct.rust">
         <symbol type="struct">
           <context behavior="subtree" />
@@ -215,7 +215,7 @@
           </scope>
         </subscopes>
       </scope>
-      <!-- Enum -->
+      <!-- !Enum -->
       <scope name="rust.definition.enum">
         <symbol type="enum">
           <context behavior="subtree" />
@@ -267,7 +267,7 @@
           </scope>
         </subscopes>
       </scope>
-      <!-- Functions -->
+      <!-- !Functions -->
       <scope name="rust.definition.function">
         <symbol type="function">
           <context behavior="subtree" foldable="false" />
@@ -308,7 +308,53 @@
       </scope>
     </collection>
     
-    <!-- Generics -->
+    <!-- !Imports -->
+    <collection name="imports">
+      <scope name="rust.import">
+        <starts-with>
+          <expression>\b(?:(pub)\s+)?(use)\b</expression>
+          <capture number="1" name="rust.keyword.modifier.visibility" />
+          <capture number="2" name="rust.keyword.statement.import" />
+        </starts-with>
+        <ends-with>
+          <expression>\;</expression>
+          <capture number="0" name="rust.punctuation.semicolon" />
+        </ends-with>
+        <subscopes>
+          <scope name="rust.import.destructured">
+            <starts-with>
+              <expression>\{</expression>
+              <capture number="0" name="rust.bracket" />
+            </starts-with>
+            <ends-with>
+              <expression>\}</expression>
+              <capture number="0" name="rust.bracket" />
+            </ends-with>
+            <subscopes>
+              <scope name="rust.import.item">
+                <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+(as)\s+([a-zA-Z_][a-zA-Z0-9_]*))?\,?\b</expression>
+                <capture number="1" name="rust.identifier" />
+                <capture number="2" name="rust.keyword.modifier" />
+                <capture number="3" name="rust.identifier" />
+              </scope>
+            </subscopes>
+          </scope>
+          <scope name="rust.import.single">
+            <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)(::)?</expression>
+            <capture number="1" name="rust.identifier" />
+            <capture number="2" name="rust.operator" />
+          </scope>
+        </subscopes>
+      </scope>
+      <scope name="rust.import.module">
+        <expression>\b(?:(pub)\s+)?(mod)\s+([a-zA-Z_][a-zA-Z0-9_]*)\;</expression>
+        <capture number="1" name="rust.keyword.modifier.visibility" />
+        <capture number="2" name="rust.keyword.statement.module" />
+        <capture number="3" name="rust.identifier" />
+      </scope>
+    </collection>
+    
+    <!-- !Generics -->
     <collection name="generics">
       <scope name="generic.type.rust">
         <starts-with>
@@ -330,7 +376,7 @@
       </scope>
     </collection>
     
-    <!-- Lifetimes -->
+    <!-- !Lifetimes -->
     <collection name="lifetimes">
       <scope name="decorator.lifetime.rust">
         <expression>&apos;[a-zA-Z_][a-zA-Z0-9_]*</expression>
@@ -338,7 +384,7 @@
       </scope>
     </collection>
     
-    <!-- Qualified Types -->
+    <!-- !Qualified Types -->
     <collection name="qualified-types">
       <scope name="rust.type.qualified">
         <starts-with>
@@ -360,7 +406,7 @@
       </scope>
     </collection>
     
-    <!-- Return Types -->
+    <!-- !Return Types -->
     <collection name="return-types">
       <scope name="rust.return-type" optional="true">
         <starts-with>
@@ -379,7 +425,7 @@
       </scope>
     </collection>
     
-    <!-- Types -->
+    <!-- !Types -->
     <collection name="types">
       <scope name="identifier.core.type.rust">
         <strings>
@@ -409,7 +455,7 @@
       </scope>
     </collection>
     
-    <!-- Values -->
+    <!-- !Values -->
     <collection name="values">
       <!-- Strings -->
       <scope name="string.rust">
