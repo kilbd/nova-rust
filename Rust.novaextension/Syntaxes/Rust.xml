@@ -107,13 +107,8 @@
               <expression>(?=\)|,)</expression>
             </ends-with>
             <subscopes>
-              <include syntax="self" collection="lifetimes" />
+              <include syntax="self" collection="qualified-types" />
               <include syntax="self" collection="types" />
-              <scope name="rust.argument.type.modifiers">
-                <expression>(&amp;)?(?:(mut)\s+)?</expression>
-                <capture number="1" name="rust.operator.pointer" />
-                <capture number="2" name="rust.keyword.modifier" />
-              </scope>
             </subscopes>
           </scope>
         </subscopes>
@@ -214,11 +209,8 @@
             </ends-with>
             <subscopes>
               <include syntax="self" collection="generics" />
-              <include syntax="self" collection="lifetimes" />
+              <include syntax="self" collection="qualified-types" />
               <include syntax="self" collection="types" />
-              <scope name="operator.pointer.rust">
-                <expression>&amp;</expression>
-              </scope>
             </subscopes>
           </scope>
         </subscopes>
@@ -277,9 +269,11 @@
       </scope>
       <!-- Functions -->
       <scope name="rust.definition.function">
-        <symbol type="function" />
+        <symbol type="function">
+          <context behavior="subtree" foldable="false" />
+        </symbol>
         <starts-with>
-          <expression>(?:\b(pub)\s+)?\b(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <expression>\b(?:(pub)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
           <capture number="1" name="rust.keyword.modifier.visibility" />
           <capture number="2" name="rust.keyword.construct.function" />
           <capture number="3" name="rust.identifier.function.name" />
@@ -344,6 +338,28 @@
       </scope>
     </collection>
     
+    <!-- Qualified Types -->
+    <collection name="qualified-types">
+      <scope name="rust.type.qualified">
+        <starts-with>
+          <expression>&amp;</expression>
+          <capture number="0" name="rust.operator.pointer" />
+        </starts-with>
+        <ends-with>
+          <expression>(?=\,|\)|\}|\;)</expression>
+        </ends-with>
+        <subscopes anchored="true">
+          <include syntax="self" collection="lifetimes" optional="true" />
+          <scope name="rust.keyword.modifier" optional="true">
+            <strings>
+              <string>mut</string>
+            </strings>
+          </scope>
+          <include syntax="self" collection="types" />
+        </subscopes>
+      </scope>
+    </collection>
+    
     <!-- Return Types -->
     <collection name="return-types">
       <scope name="rust.return-type" optional="true">
@@ -353,11 +369,12 @@
           <capture number="2" name="rust.bracket" />
         </starts-with>
         <ends-with>
-          <expression>(\)|(?=\{|\,|\;)|$</expression>
+          <expression>(\))|(?=\{|\,|\;)|$</expression>
           <capture number="1" name="rust.bracket" />
         </ends-with>
         <subscopes>
-          <include syntax="self" collection="argument-items" />
+          <include syntax="self" collection="qualified-types" />
+          <include syntax="self" collection="types" />
         </subscopes>
       </scope>
     </collection>
