@@ -51,7 +51,8 @@
   
   <scopes>
     <include syntax="self" collection="comments" />
-    <include syntax="self" collection="types" />
+    <include syntax="self" collection="definitions" />
+    <!-- <include syntax="self" collection="types" /> -->
     <include syntax="self" collection="values" />
   </scopes>
   
@@ -79,9 +80,101 @@
       </scope>
     </collection>
     
+    <!-- Definitions -->
+    <collection name="definitions">
+      <!-- Constant -->
+      <scope name="definition.constant.rust">
+        <symbol type="constant" scope="local" />
+        <expression>\b(let)\s+(?!mut\s)([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
+        <capture number="1" name="keyword.construct.variable.rust" />
+        <capture number="2" name="identifier.constant.rust.name" />
+        <capture number="3" name="operator.rust" />
+        <capture number="4" name="identifier.type.rust" />
+        <capture number="5" name="operator.rust" />
+      </scope>
+      <!-- Variable -->
+      <scope name="definition.identifier.rust">
+        <symbol type="variable" scope="local" />
+        <expression>\b(let)\s+(mut)\s+([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
+        <capture number="1" name="keyword.construct.variable.rust" />
+        <capture number="2" name="keyword.modifier.rust" />
+        <capture number="3" name="identifier.rust.name" />
+        <capture number="4" name="operator.rust" />
+        <capture number="5" name="identifier.type.rust" />
+        <capture number="6" name="operator.rust" />
+      </scope>
+      <!-- Struct -->
+      <scope name="definition.struct.rust">
+        <symbol type="struct">
+          <context behavior="subtree" />
+        </symbol>
+        <starts-with>
+          <expression>\b(pub)?\s*(struct)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*</expression>
+          <capture number="1" name="keyword.modifier.visibility.rust" />
+          <capture number="2" name="keyword.construct.struct.rust" />
+          <capture number="3" name="identifier.type.struct.rust.name" />
+        </starts-with>
+        <ends-with>
+          <expression>(?&lt;=\}|;)</expression>
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="generics" />
+          <scope name="definition.property.rust">
+            <symbol type="property" />
+            <starts-with>
+              <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)(:)</expression>
+              <capture number="1" name="identifier.property.rust.name" />
+              <capture number="2" name="punctuation.rust" />
+            </starts-with>
+            <ends-with>
+              <expression>(?&lt;=,|\})</expression>
+            </ends-with>
+            <subscopes>
+              <include syntax="self" collection="generics" />
+              <include syntax="self" collection="lifetimes" />
+              <include syntax="self" collection="types" />
+              <scope name="operator.pointer.rust">
+                <expression>&amp;</expression>
+              </scope>
+            </subscopes>
+          </scope>
+        </subscopes>
+      </scope>
+    </collection>
+    
+    <!-- Generics -->
+    <collection name="generics">
+      <scope name="generic.type.rust">
+        <starts-with>
+          <expression>&lt;</expression>
+          <capture number="0" name="bracket.generic.rust" />
+        </starts-with>
+        <ends-with>
+          <expression>&gt;</expression>
+          <capture number="0" name="bracket.generic.rust" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="generics" />
+          <include syntax="self" collection="lifetimes" />
+          <include syntax="self" collection="types" />
+          <scope name="punctuation.separator.rust">
+            <expression>,</expression>
+          </scope>
+        </subscopes>
+      </scope>
+    </collection>
+    
+    <!-- Lifetimes -->
+    <collection name="lifetimes">
+      <scope name="decorator.lifetime.rust">
+        <expression>&apos;[a-zA-Z_][a-zA-Z0-9_]*</expression>
+        <capture number="0" name="identifier.decorator.lifetime.name.rust" />
+      </scope>
+    </collection>
+    
     <!-- Types -->
     <collection name="types">
-      <scope name="identifier.type.core.rust">
+      <scope name="identifier.core.type.rust">
         <strings>
           <string>bool</string>
           <string>char</string>
@@ -101,6 +194,11 @@
           <string>u128</string>
           <string>usize</string>
         </strings>
+      </scope>
+      <scope name="identifier.type.rust">
+        <expression>(\[)?([a-zA-Z_][a-zA-Z0-9_]*)(\])?</expression>
+        <capture number="1" name="operator.array.bracket.rust" />
+        <capture number="3" name="operator.array.bracket.rust" />
       </scope>
     </collection>
     
