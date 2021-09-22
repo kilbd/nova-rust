@@ -55,6 +55,7 @@
     <include syntax="self" collection="definitions" />
     <include syntax="self" collection="identifiers" />
     <include syntax="self" collection="imports" />
+    <include syntax="self" collection="keywords" />
     <include syntax="self" collection="processing" />
     <include syntax="self" collection="values" />
   </scopes>
@@ -386,8 +387,12 @@
       <scope name="rust.identifier.method.static">
         <expression>(?&lt;=\:\:)([a-zA-Z_\$][A-Za-z0-9_]*)(?=\()</expression>
       </scope>
-      <scope name="typescript.identifier.function">
+      <scope name="rust.identifier.function">
         <expression>(?&lt;!\.)((?:\b[a-zA-Z_]|\$)[A-Za-z0-9_]*)(?=\()</expression>
+      </scope>
+      <!-- Calling a macro markup is silly, but does make it stand out. -->
+      <scope name="rust.identifier.global.function.markup.bold.macro">
+        <expression>(?&lt;!\.)((?:\b[a-zA-Z_])[A-Za-z0-9_]*)\!(?=\()</expression>
       </scope>
     </collection>
     
@@ -434,6 +439,80 @@
         <capture number="1" name="rust.keyword.modifier.visibility" />
         <capture number="2" name="rust.keyword.statement.module" />
         <capture number="3" name="rust.identifier" />
+      </scope>
+    </collection>
+    
+    <!-- !Keywords -->
+    <collection name="keywords">
+      <scope name="rust.keyword.condition">
+        <strings>
+          <string>break</string>
+          <string>continue</string>
+          <string>else</string>
+          <string>for</string>
+          <string>if</string>
+          <string>loop</string>
+          <string>match</string>
+          <string>while</string>
+        </strings>
+      </scope>
+      <scope name="rust.keyword.construct">
+        <strings>
+          <string>const</string>
+          <string>enum</string>
+          <string>fn</string>
+          <string>impl</string>
+          <string>let</string>
+          <string>mod</string>
+          <string>struct</string>
+          <string>trait</string>
+          <string>type</string>
+          <string>union</string>
+        </strings>
+      </scope>
+      <scope name="rust.keyword.modifier">
+        <strings>
+          <string>as</string>
+          <string>async</string>
+          <string>await</string>
+          <string>crate</string>
+          <string>dyn</string>
+          <string>extern</string>
+          <string>in</string>
+          <string>mut</string>
+          <string>pub</string>
+          <string>ref</string>
+          <string>return</string>
+          <string>static</string>
+          <string>&apos;static</string>
+          <string>unsafe</string>
+          <string>use</string>
+          <string>where</string>
+        </strings>
+      </scope>
+      <scope name="rust.keyword.reserved">
+        <strings>
+          <string>abstract</string>
+          <string>become</string>
+          <string>box</string>
+          <string>do</string>
+          <string>final</string>
+          <string>macro</string>
+          <string>override</string>
+          <string>priv</string>
+          <string>try</string>
+          <string>typeof</string>
+          <string>unsized</string>
+          <string>virtual</string>
+          <string>yield</string>
+        </strings>
+      </scope>
+      <scope name="rust.keyword.self">
+        <strings>
+          <string>self</string>
+          <string>Self</string>
+          <string>super</string>
+        </strings>
       </scope>
     </collection>
     
