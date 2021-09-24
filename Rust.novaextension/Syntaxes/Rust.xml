@@ -185,7 +185,7 @@
         <capture number="6" name="operator.rust" />
       </scope>
       <!-- !Struct -->
-      <scope name="definition.struct.rust">
+      <scope name="rust.definition.struct">
         <symbol type="struct">
           <context behavior="start" group-by-name="true" unclosed="truncate" />
         </symbol>
@@ -357,6 +357,31 @@
           </scope>
         </subscopes>
       </scope> -->
+      <scope name="rust.definition.interface">
+        <symbol type="interface">
+          <context behavior="subtree" foldable="false" />
+        </symbol>
+        <starts-with>
+          <expression>\b(?:(pub)\s+)?(trait)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <capture number="1" name="rust.keyword.modifier.visibility" />
+          <capture number="2" name="rust.keyword.construct.interface" />
+          <capture number="3" name="rust.identifier.type.protocol.name" />
+        </starts-with>
+        <ends-with />
+        <subscopes anchored="true">
+          <scope name="rust.block.trait">
+            <starts-with>
+              <expression>\{</expression>
+            </starts-with>
+            <ends-with>
+              <expression>\}</expression>
+            </ends-with>
+            <subscopes>
+              <include syntax="self" collection="method-definition" />
+            </subscopes>
+          </scope>
+        </subscopes>
+      </scope>
     </collection>
     <collection name="method-definition">
       <scope name="rust.definition.method">
