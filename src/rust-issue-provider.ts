@@ -26,22 +26,27 @@ export class RustIssueProvider {
   private parseIssues(line: string) {
     let issues: Issue[] = []
     let data: CargoCheckData = JSON.parse(line)
-    let note = data.message.children.find(
-      (item) => item.level == 'note'
-    )?.message
-    let code = data.message.code?.code
-    issues.push(this.generateIssue(data.message, code, note))
-    let hint = data.message.children.find((item) => item.level == 'help')
-    if (hint) {
-      issues.push(this.generateIssue(hint))
-    }
-    let filename = data.message.spans.find((item) => item.is_primary)?.file_name
-    if (filename) {
-      const file = `${nova.workspace.path}/${filename}`
-      if (this.collection.has(file)) {
-        this.collection.append(file, issues)
-      } else {
-        this.collection.set(file, issues)
+    // Not all output is issues from the compiler
+    if (data.reason === 'compiler-message') {
+      let note = data.message.children.find(
+        (item) => item.level == 'note'
+      )?.message
+      let code = data.message.code?.code
+      issues.push(this.generateIssue(data.message, code, note))
+      let hint = data.message.children.find((item) => item.level == 'help')
+      if (hint) {
+        issues.push(this.generateIssue(hint))
+      }
+      let filename = data.message.spans.find(
+        (item) => item.is_primary
+      )?.file_name
+      if (filename) {
+        const file = `${nova.workspace.path}/${filename}`
+        if (this.collection.has(file)) {
+          this.collection.append(file, issues)
+        } else {
+          this.collection.set(file, issues)
+        }
       }
     }
   }
@@ -79,9 +84,7 @@ export class RustIssueProvider {
 }
 
 interface CargoCheckData {
-  target: {
-    src_path: string
-  }
+  reason: string
   message: {
     children: IssueData[]
     code?: {
