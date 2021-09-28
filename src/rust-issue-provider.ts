@@ -26,40 +26,55 @@ export class RustIssueProvider {
   private parseIssues(line: string) {
     let issues: Issue[] = []
     let data: CargoCheckData = JSON.parse(line)
-    let mainIssue = new Issue()
-    if (data.message?.level) {
-      mainIssue.message = data.message.message
-      if (data.message.code) mainIssue.code = data.message.code.code
-      switch (data.message.level) {
-        case 'error':
-          mainIssue.severity = IssueSeverity.Error
-          break
-        case 'warning':
-          mainIssue.severity = IssueSeverity.Warning
-          break
-        case 'hint':
-          mainIssue.severity = IssueSeverity.Hint
-          break
-        case 'info':
-          mainIssue.severity = IssueSeverity.Info
-          break
-      }
-      const issueSpan = data.message.spans.find((item) => item.is_primary)
-      mainIssue.line = issueSpan?.line_start
-      mainIssue.endLine = issueSpan?.line_end
-      mainIssue.column = issueSpan?.column_start
-      mainIssue.endColumn = issueSpan?.column_end
-      issues.push(mainIssue)
-      console.log(issueSpan?.file_name)
-      if (issueSpan?.file_name) {
-        const file = `${nova.workspace.path}/${issueSpan.file_name}`
-        if (this.collection.has(file)) {
-          this.collection.append(file, issues)
-        } else {
-          this.collection.set(file, issues)
-        }
+    let note = data.message.children.find(
+      (item) => item.level == 'note'
+    )?.message
+    let code = data.message.code?.code
+    issues.push(this.generateIssue(data.message, code, note))
+    let hint = data.message.children.find((item) => item.level == 'help')
+    if (hint) {
+      issues.push(this.generateIssue(hint))
+    }
+    let filename = data.message.spans.find((item) => item.is_primary)?.file_name
+    if (filename) {
+      const file = `${nova.workspace.path}/${filename}`
+      if (this.collection.has(file)) {
+        this.collection.append(file, issues)
+      } else {
+        this.collection.set(file, issues)
       }
     }
+  }
+
+  private generateIssue(data: IssueData, code?: string, note?: string): Issue {
+    let issue = new Issue()
+    if (note) {
+      issue.message = `${data.message}\n${note}`
+    } else {
+      issue.message = data.message
+    }
+    if (code) issue.code = code
+    issue.source = 'rustc'
+    switch (data.level) {
+      case 'error':
+        issue.severity = IssueSeverity.Error
+        break
+      case 'warning':
+        issue.severity = IssueSeverity.Warning
+        break
+      case 'help':
+        issue.severity = IssueSeverity.Hint
+        break
+      default:
+        issue.severity = IssueSeverity.Info
+        break
+    }
+    const issueSpan = data.spans.find((item) => item.is_primary)
+    issue.line = issueSpan?.line_start
+    issue.endLine = issueSpan?.line_end
+    issue.column = issueSpan?.column_start
+    issue.endColumn = issueSpan?.column_end
+    return issue
   }
 }
 
@@ -68,19 +83,7 @@ interface CargoCheckData {
     src_path: string
   }
   message: {
-    children?: {
-      level: string
-      message: string
-      spans: {
-        column_end: number
-        column_start: number
-        file_name: string
-        is_primary: boolean
-        line_end: number
-        line_start: number
-        suggested_replacement: string | null
-      }[]
-    }[]
+    children: IssueData[]
     code?: {
       code: string
     }
@@ -95,4 +98,18 @@ interface CargoCheckData {
       line_start: number
     }[]
   }
+}
+
+interface IssueData {
+  level: string
+  message: string
+  spans: {
+    column_end: number
+    column_start: number
+    file_name: string
+    is_primary: boolean
+    line_end: number
+    line_start: number
+    suggested_replacement?: string | null
+  }[]
 }
