@@ -7,7 +7,6 @@ export class RustIssueProvider {
   constructor() {}
 
   run() {
-    console.log('generating issues')
     this.collection.clear()
     let process = new Process('cargo', {
       args: ['check', '--message-format=json'],

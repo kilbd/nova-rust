@@ -26,10 +26,17 @@ export class RustLanguageServer {
       path = '/usr/local/bin/rust-analyzer'
     }
 
-    // Create the client
-    var serverOptions = {
-      path: '/bin/bash',
-      args: ['-c', `${path} | tee /Users/dk74/Desktop/rust-ext.log`],
+    var serverOptions: ServerOptions = {
+      path: path,
+    }
+    if (nova.inDevMode()) {
+      serverOptions = {
+        path: '/bin/bash',
+        args: [
+          '-c',
+          `${path} | tee "${nova.workspace.path}/logs/rust-lang-server.log"`,
+        ],
+      }
     }
     var clientOptions = {
       // The set of document syntaxes for which the server is valid
@@ -73,4 +80,9 @@ export class RustLanguageServer {
       this.languageClient = null
     }
   }
+}
+
+interface ServerOptions {
+  path: string
+  args?: string[]
 }
