@@ -18,7 +18,15 @@
       "key": "com.kilb.rust.language-server-path",
       "title": "Language Server Path",
       "type": "path",
-      "placeholder": "/usr/local/bin/example"
+      "placeholder": "/usr/local/bin/rust-analyzer",
+      "default": "/usr/local/bin/rust-analyzer"
+    },
+    {
+      "key": "com.kilb.rust.rustfmt-on-save",
+      "title": "Format on Save",
+      "description": "If enabled, files are formatted with `rustfmt` after saving.",
+      "type": "boolean",
+      "default": "false"
     }
   ]
 }
