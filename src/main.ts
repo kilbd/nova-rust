@@ -9,9 +9,10 @@ export function activate() {
   langServer = new RustLanguageServer()
   let issueProvider = new RustIssueProvider()
   let formatter = new RustFormatter()
-  nova.workspace.onDidAddTextEditor((editor: TextEditor) => {
-    editor.onDidSave(() => {
-      formatter.format()
+  nova.workspace.onDidAddTextEditor(async (editor: TextEditor) => {
+    editor.onDidSave(async (editor: TextEditor) => {
+      await formatter.format(editor)
+      console.log('should be finished formatting')
       issueProvider.run()
     })
   })
