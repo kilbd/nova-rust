@@ -2,8 +2,8 @@
   "identifier": "com.kilb.Rust",
   "name": "Rust Analyzer",
   "organization": "Drew Kilb",
-  "description": "Rust support for Nova with Rust Analyzer",
-  "version": "1.0",
+  "description": "Rust support for Nova with Rust Analyzer and Rustfmt",
+  "version": "0.1",
   "categories": ["languages"],
 
   "repository": "https://github.com/kilbd/nova-rust",
