@@ -1,12 +1,19 @@
 {
   "identifier": "com.kilb.Rust",
-  "name": "Rust",
+  "name": "Rust Analyzer",
   "organization": "Drew Kilb",
-  "description": "Lorem ipsum, dolor sit amet.",
+  "description": "Rust support for Nova with Rust Analyzer",
   "version": "1.0",
   "categories": ["languages"],
 
+  "repository": "https://github.com/kilbd/nova-rust",
+  "bugs": "https://github.com/kilbd/nova-rust/issues",
+
   "main": "main.js",
+
+  "activationEvents": [
+    "onWorkspaceContains:Cargo.toml"
+  ],
 
   "entitlements": {
     "process": true,
@@ -16,17 +23,18 @@
   "config": [
     {
       "key": "com.kilb.rust.language-server-path",
-      "title": "Language Server Path",
+      "title": "Rust Analyzer Path",
+      "description": "Path to the Rust Analyzer binary",
+      "link": "https://github.com/rust-analyzer/rust-analyzer/releases",
       "type": "path",
-      "placeholder": "/usr/local/bin/rust-analyzer",
-      "default": "/usr/local/bin/rust-analyzer"
+      "required": true
     },
     {
       "key": "com.kilb.rust.rustfmt-on-save",
       "title": "Format on Save",
       "description": "If enabled, files are formatted with `rustfmt` after saving.",
       "type": "boolean",
-      "default": "false"
+      "default": true
     }
   ]
 }
