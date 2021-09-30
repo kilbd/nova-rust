@@ -12,7 +12,6 @@ export function activate() {
   nova.workspace.onDidAddTextEditor(async (editor: TextEditor) => {
     editor.onDidSave(async (editor: TextEditor) => {
       await formatter.format(editor)
-      console.log('should be finished formatting')
       issueProvider.run()
     })
   })
