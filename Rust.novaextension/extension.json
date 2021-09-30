@@ -32,7 +32,7 @@
     {
       "key": "com.kilb.rust.rustfmt-on-save",
       "title": "Format on Save",
-      "description": "If enabled, files are formatted with `rustfmt` after saving.",
+      "description": "If enabled, files are formatted with `Rustfmt` after saving.",
       "type": "boolean",
       "default": true
     }
