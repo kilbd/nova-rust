@@ -17,15 +17,8 @@ export class RustFormatter {
         fmtProcess.onStderr((err: string) => console.error(err))
         fmtProcess.onDidExit((status: number) => {
           if (status !== 0) {
-            let notification = new NotificationRequest('rustfmt.error')
-            notification.title = nova.localize('rustfmt Failed')
-            notification.body = nova.localize(
-              'If this error persists, please create a bug report/issue.'
-            )
-            // No user actions configured, so I'm ignoring the returned promise.
-            nova.notifications.add(notification)
+            console.error("Rustfmt stopped with non-zero code: " + status)
           }
-          resolve()
         })
         fmtProcess.start()
       } else {
