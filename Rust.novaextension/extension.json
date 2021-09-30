@@ -28,6 +28,13 @@
       "link": "https://github.com/rust-analyzer/rust-analyzer/releases",
       "type": "path",
       "required": true
+    },
+    {
+      "key": "com.kilb.rust.rustfmt-on-save",
+      "title": "Format on Save",
+      "description": "If enabled, files are formatted with `rustfmt` after saving.",
+      "type": "boolean",
+      "default": true
     }
   ]
 }

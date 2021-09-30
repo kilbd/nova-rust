@@ -1,3 +1,4 @@
+import { RustFormatter } from './rust-formatter'
 import { RustIssueProvider } from './rust-issue-provider'
 import { RustLanguageServer } from './rust-lang-server'
 
@@ -7,8 +8,10 @@ export function activate() {
   // Do work when the extension is activated
   langServer = new RustLanguageServer()
   let issueProvider = new RustIssueProvider()
+  let formatter = new RustFormatter()
   nova.workspace.onDidAddTextEditor((editor: TextEditor) => {
     editor.onDidSave(() => {
+      formatter.format()
       issueProvider.run()
     })
   })
