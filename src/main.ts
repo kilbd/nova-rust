@@ -10,9 +10,10 @@ export function activate() {
   let issueProvider = new RustIssueProvider()
   let formatter = new RustFormatter()
   nova.workspace.onDidAddTextEditor(async (editor: TextEditor) => {
-    editor.onDidSave(async (editor: TextEditor) => {
-      await formatter.format(editor)
-      console.log('should be finished formatting')
+    editor.onWillSave((editor: TextEditor) => {
+      return formatter.format(editor)
+    })
+    editor.onDidSave(async () => {
       issueProvider.run()
     })
   })
