@@ -26,3 +26,66 @@ export function makeScriptsExecutable(): Promise<void> {
     }
   })
 }
+
+export function getLatestBinary(): Promise<boolean> {
+  return new Promise(async (resolve, reject) => {
+    let binPath = `${nova.extension.path}/bin`
+    let raVersion = 'none'
+    if (
+      nova.fs.access(`${binPath}/rust-analyzer`, nova.fs.F_OK + nova.fs.X_OK)
+    ) {
+      let data: GitHubReleaseData[] = []
+      try {
+        let ghResponse = await fetch(
+          'https://api.github.com/repos/rust-analyzer/rust-analyzer/releases',
+          {
+            method: 'GET',
+            headers: { Accept: 'application/vnd.github.v3+json' },
+          }
+        )
+        data = await ghResponse.json()
+      } catch (err) {
+        console.error(err)
+      }
+      raVersion =
+        data.find(
+          (item) =>
+            !item.draft && !item.prerelease && item.tag_name !== 'nightly'
+        )?.name || 'none'
+    }
+    console.log(`Latest Rust Analyzer version: ${raVersion}`)
+    // Replacing a file while running in dev mode causes the extension to
+    // restart. Replacing a file during activation gets you stuck in a loop.
+    if (nova.inDevMode()) {
+      resolve(true)
+    } else {
+      let newBinary = false
+      let downloadProcess = new Process('./update_server.sh', {
+        args: [raVersion],
+        cwd: binPath,
+        shell: true,
+      })
+      downloadProcess.onStdout((line: string) => {
+        if (line === 'downloading new binary...') {
+          newBinary = true
+        }
+      })
+      downloadProcess.onStderr((err: string) => console.error(err))
+      downloadProcess.onDidExit((status: number) => {
+        if (status === 0) {
+          resolve(newBinary)
+        } else {
+          reject()
+        }
+      })
+      downloadProcess.start()
+    }
+  })
+}
+
+interface GitHubReleaseData {
+  draft: boolean
+  name: string
+  prerelease: boolean
+  tag_name: string
+}

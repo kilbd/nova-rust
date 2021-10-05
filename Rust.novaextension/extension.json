@@ -15,6 +15,7 @@
 
   "entitlements": {
     "process": true,
+    "requests": true,
     "filesystem": "readonly"
   },
 

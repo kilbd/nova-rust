@@ -10,6 +10,7 @@ elif [[ "$(rust-analyzer --version)" =~ $version_regex ]]; then
 fi
 
 if [[ $download = true ]]; then
+    echo "downloading new binary..."
     binary="rust-analyzer-x86_64-apple-darwin.gz"
     if [[ "$(uname -p)" = "arm" ]]; then
         binary="rust-analyzer-aarch64-apple-darwin.gz"
