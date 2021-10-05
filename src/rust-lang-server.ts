@@ -1,5 +1,5 @@
 export class RustLanguageServer {
-  languageClient: LanguageClient | null = null
+  private languageClient: LanguageClient | null = null
 
   constructor() {
     // Observe the configuration setting for the server's location, and restart the server on change
@@ -9,6 +9,10 @@ export class RustLanguageServer {
         this.start(path)
       }
     )
+  }
+
+  get client(): LanguageClient | null {
+    return this.languageClient
   }
 
   deactivate() {

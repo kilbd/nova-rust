@@ -1,7 +1,8 @@
+let binPath = `${nova.extension.path}/bin`
+
 // Panic strips execute permissions for files uploaded for extensions
 export function makeScriptsExecutable(): Promise<void> {
   return new Promise((resolve, reject) => {
-    let binPath = `${nova.extension.path}/bin`
     if (
       !nova.fs.access(
         `${binPath}/update_server.sh`,
@@ -29,7 +30,6 @@ export function makeScriptsExecutable(): Promise<void> {
 
 export function getLatestBinary(): Promise<boolean> {
   return new Promise(async (resolve, reject) => {
-    let binPath = `${nova.extension.path}/bin`
     let raVersion = 'none'
     if (
       nova.fs.access(`${binPath}/rust-analyzer`, nova.fs.F_OK + nova.fs.X_OK)
@@ -57,7 +57,7 @@ export function getLatestBinary(): Promise<boolean> {
     // Replacing a file while running in dev mode causes the extension to
     // restart. Replacing a file during activation gets you stuck in a loop.
     if (nova.inDevMode()) {
-      resolve(true)
+      resolve(false)
     } else {
       let newBinary = false
       let downloadProcess = new Process('./update_server.sh', {
@@ -81,6 +81,11 @@ export function getLatestBinary(): Promise<boolean> {
       downloadProcess.start()
     }
   })
+}
+
+export function replaceBinary() {
+  nova.fs.remove(`${binPath}/rust-analyzer`)
+  nova.fs.move(`${binPath}/rust-analyzer-new`, `${binPath}/rust-analyzer`)
 }
 
 interface GitHubReleaseData {

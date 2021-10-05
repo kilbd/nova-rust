@@ -15,6 +15,7 @@ if [[ $download = true ]]; then
     if [[ "$(uname -p)" = "arm" ]]; then
         binary="rust-analyzer-aarch64-apple-darwin.gz"
     fi
-    curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/$binary | gunzip -c - > ./rust-analyzer
-    chmod +x ./rust-analyzer
+    curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/$binary \
+        | gunzip -c - > ./rust-analyzer-new
+    chmod +x ./rust-analyzer-new
 fi

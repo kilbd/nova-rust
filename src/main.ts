@@ -1,7 +1,11 @@
 import { RustFormatter } from './rust-formatter'
 import { RustIssueProvider } from './rust-issue-provider'
 import { RustLanguageServer } from './rust-lang-server'
-import { makeScriptsExecutable, getLatestBinary } from './server-install'
+import {
+  makeScriptsExecutable,
+  getLatestBinary,
+  replaceBinary,
+} from './server-install'
 
 let langServer: RustLanguageServer | null = null
 
@@ -22,9 +26,11 @@ export async function activate() {
   await makeScriptsExecutable()
   getLatestBinary().then((restart: boolean) => {
     if (restart) {
-      console.log('need to restart')
-      // langServer?.stop()
-      // langServer?.start('./bin/rust-analyzer')
+      langServer?.client?.onDidStop(() => {
+        replaceBinary()
+        langServer?.start('./bin/rust-analyzer')
+      })
+      langServer?.stop()
     }
   })
 }
