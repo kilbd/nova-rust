@@ -1,13 +1,13 @@
 {
-  "identifier": "com.kilb.Rust",
-  "name": "Rust Analyzer",
+  "identifier": "com.kilb.rust",
+  "name": "Rust",
   "organization": "Drew Kilb",
-  "description": "Rust support for Nova with Rust Analyzer",
-  "version": "1.0",
-  "categories": ["languages"],
-
+  "description": "Rust language support for Nova featuring Rust Analyzer, syntax definitions, and format on save.",
   "repository": "https://github.com/kilbd/nova-rust",
   "bugs": "https://github.com/kilbd/nova-rust/issues",
+  "license": "MIT",
+  "version": "1.0.0",
+  "categories": ["languages", "formatters"],
 
   "main": "main.js",
 
