@@ -1,0 +1,3 @@
+# In dev mode, logs from the language server go in this directory - ignore them!
+*.*
+!.gitignore

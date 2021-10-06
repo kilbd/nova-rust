@@ -1,12 +1,18 @@
 import { RustFormatter } from './rust-formatter'
 import { RustIssueProvider } from './rust-issue-provider'
 import { RustLanguageServer } from './rust-lang-server'
+import {
+  makeScriptsExecutable,
+  getLatestBinary,
+  replaceBinary,
+} from './server-install'
 
 let langServer: RustLanguageServer | null = null
 
-export function activate() {
+export async function activate() {
   // Do work when the extension is activated
   langServer = new RustLanguageServer()
+  langServer.start()
   let issueProvider = new RustIssueProvider()
   let formatter = new RustFormatter()
   nova.workspace.onDidAddTextEditor(async (editor: TextEditor) => {
@@ -18,6 +24,16 @@ export function activate() {
     })
   })
   issueProvider.run()
+  await makeScriptsExecutable()
+  getLatestBinary().then((restart: boolean) => {
+    if (restart) {
+      langServer?.client?.onDidStop(() => {
+        replaceBinary()
+        langServer?.start()
+      })
+      langServer?.stop()
+    }
+  })
 }
 
 export function deactivate() {
