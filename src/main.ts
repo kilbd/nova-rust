@@ -12,6 +12,7 @@ let langServer: RustLanguageServer | null = null
 export async function activate() {
   // Do work when the extension is activated
   langServer = new RustLanguageServer()
+  langServer.start()
   let issueProvider = new RustIssueProvider()
   let formatter = new RustFormatter()
   nova.workspace.onDidAddTextEditor(async (editor: TextEditor) => {
@@ -28,7 +29,7 @@ export async function activate() {
     if (restart) {
       langServer?.client?.onDidStop(() => {
         replaceBinary()
-        langServer?.start('./bin/rust-analyzer')
+        langServer?.start()
       })
       langServer?.stop()
     }

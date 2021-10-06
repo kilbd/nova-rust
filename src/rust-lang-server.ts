@@ -1,15 +1,7 @@
 export class RustLanguageServer {
   private languageClient: LanguageClient | null = null
 
-  constructor() {
-    // Observe the configuration setting for the server's location, and restart the server on change
-    nova.config.observe(
-      'com.kilb.rust.language-server-path',
-      (path: string) => {
-        this.start(path)
-      }
-    )
-  }
+  constructor() {}
 
   get client(): LanguageClient | null {
     return this.languageClient
@@ -19,16 +11,13 @@ export class RustLanguageServer {
     this.stop()
   }
 
-  start(path: string) {
+  start() {
     if (this.languageClient) {
       this.languageClient.stop()
       nova.subscriptions.remove(this.languageClient)
     }
 
-    // Use the default server path
-    if (!path) {
-      path = '/usr/local/bin/rust-analyzer'
-    }
+    let path = `${nova.extension.path}/bin/rust-analyzer`
 
     var serverOptions: ServerOptions = {
       path: path,
@@ -38,7 +27,7 @@ export class RustLanguageServer {
         path: '/bin/bash',
         args: [
           '-c',
-          `${path} | tee "${nova.workspace.path}/logs/rust-lang-server.log"`,
+          `${path} | tee "${nova.extension.path}/../logs/rust-lang-server.log"`,
         ],
       }
     }
@@ -53,7 +42,7 @@ export class RustLanguageServer {
     }
     var client = new LanguageClient(
       'rust',
-      'Rust Language Server',
+      'Rust Analyzer',
       serverOptions,
       clientOptions
     )
@@ -63,7 +52,6 @@ export class RustLanguageServer {
     })
 
     try {
-      // Start the client
       client.start()
 
       // Add the client to the subscriptions to be cleaned up

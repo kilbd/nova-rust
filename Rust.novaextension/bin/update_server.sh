@@ -3,7 +3,7 @@ version_regex="^rust\-analyzer[[:space:]][[:alnum:]]+[[:space:]]([[:digit:]]{4}\
 download=false
 if [[ ! -f "./rust-analyzer" ]]; then
     download=true
-elif [[ "$(rust-analyzer --version)" =~ $version_regex ]]; then
+elif [[ "$(./rust-analyzer --version)" =~ $version_regex ]]; then
     if [[ "${BASH_REMATCH[1]}" != "$1" ]]; then
         download=true
     fi
