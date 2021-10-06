@@ -21,14 +21,6 @@
 
   "config": [
     {
-      "key": "com.kilb.rust.language-server-path",
-      "title": "Rust Analyzer Path",
-      "description": "Path to the Rust Analyzer binary",
-      "link": "https://github.com/rust-analyzer/rust-analyzer/releases",
-      "type": "path",
-      "default": "/usr/local/bin/rust-analyzer"
-    },
-    {
       "key": "com.kilb.rust.rustfmt-on-save",
       "title": "Format on Save",
       "description": "If enabled, files are formatted with `rustfmt` after saving.",
