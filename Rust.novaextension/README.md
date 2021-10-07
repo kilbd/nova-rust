@@ -12,7 +12,7 @@ Let's get started!
 🎈 Include a brief description of the features your extension provides. For example:
 -->
 
-**Rust** provides deep integration with **An Important Language**, including the most important feature, something that's really helpful, and _a little-known secret!_
+The **Rust** extension provides deep integration with [**the Rust Language**](https://www.rust-lang.org/) through the [Rust Analyzer](https://rust-analyzer.github.io/) language server, syntax highlighting, error checking, and formatting on save.
 
 <!--
 🎈 It can also be helpful to include a screenshot or GIF showing your extension in action:
@@ -26,15 +26,17 @@ Let's get started!
 🎈 If your extension depends on external processes or tools that users will need to have, it's helpful to list those and provide links to their installers:
 -->
 
-Rust requires some additional tools to be installed on your Mac:
+This Rust extension assumes you have common Rust tools installed on your Mac:
 
-- [Node.js 8.2.0](https://nodejs.org) and NPM 5.2.0 or newer
+- **Rust** (the `rustc` compiler)
+- **Cargo** for managing projects
+- **Rustfmt** for formatting documents
+
+The best way to install these requirements and keep them updated is by using the [rustup](https://rustup.rs/) tool. Copy the command at that link into a terminal and run it. Rustup also allows you to switch between Rust versions (e.g., stable or nightly). In-depth documentation on how to use it can be found [here](https://rust-lang.github.io/rustup/).
 
 <!--
 ✨ Providing tips, tricks, or other guides for installing or configuring external dependencies can go a long way toward helping your users have a good setup experience:
 -->
-
-> To install the current stable version of Node, click the "Recommended for Most Users" button to begin the download. When that completes, double-click the **.pkg** installer to begin installation.
 
 ## Usage
 
@@ -42,20 +44,21 @@ Rust requires some additional tools to be installed on your Mac:
 🎈 If your extension provides features that are invoked manually, consider describing those options for users:
 -->
 
-To run Rust:
-
-- Select the **Editor → Rust** menu item; or
-- Open the command palette and type `Rust`
+Syntax highlighting, completion assistance from Rust Analyzer, and error checking happen automatically when you open a Rust project. You can find errors and warnings in Nova's **Issues** sidebar and the editor gutter (checks currently happen after each save). When enabled (see "Configuration" below), your documents can be automatically formatted using Rustfmt whenever you save them.
 
 <!--
 🎈 Alternatively, if your extension runs automatically (as in the case of a validator), consider showing users what they can expect to see:
 -->
 
-Rust runs any time you open a local project, automatically lints all open files, then reports errors and warnings in Nova's **Issues** sidebar and the editor gutter:
+### Hover Info
 
-![](https://nova.app/images/en/dark/tools/sidebars.png)
+View descriptions or type info by hovering your mouse cursor over identifiers.
 
-### Configuration
+### Jump to Definition
+
+Right click an identifier and select **Jump to Definition** from the menu to be taken to the file location where the selected symbol is defined.
+
+## Configuration
 
 <!--
 🎈 If your extension offers global- or workspace-scoped preferences, consider pointing users toward those settings. For example:
@@ -65,8 +68,14 @@ To configure global preferences, open **Extensions → Extension Library...** th
 
 You can also configure preferences on a per-project basis in **Project → Project Settings...**
 
-<!--
-👋 That's it! Happy developing!
+### Save on Format
 
-P.S. If you'd like, you can remove these comments before submitting your extension 😉
--->
+Checking this checkbox will run `rustfmt` on a Rust document when you save it. A `rustfmt.toml` configuration file in you project is highly encouraged!
+
+## Entitlements
+
+Here's why this extension uses the following entitlements:
+
+- **Read/Write File System Access** - needed to update the Rust Analyzer binary, as well as to let this server do its thing.
+- **Network Access** - used to check for updates for Rust Analyzer, and download updates if available.
+- **Processes** - used to run the language server, update the language server, check for errors, and format documents.
