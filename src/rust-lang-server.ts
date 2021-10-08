@@ -1,5 +1,6 @@
 export class RustLanguageServer {
   private languageClient: LanguageClient | null = null
+  private crashAlert: Disposable | null = null
 
   constructor() {}
 
@@ -11,6 +12,11 @@ export class RustLanguageServer {
     this.stop()
   }
 
+  restart() {
+    this.stop()
+    this.start()
+  }
+
   start() {
     if (this.languageClient) {
       this.languageClient.stop()
@@ -18,6 +24,12 @@ export class RustLanguageServer {
     }
 
     let path = `${nova.extension.path}/bin/rust-analyzer`
+    // The Rust Analyzer binary won't exist when extension is first run
+    // after installing.
+    if (!nova.fs.access(path, nova.fs.F_OK + nova.fs.X_OK)) {
+      console.log('Rust Analyzer binary not found. Aborting start process.')
+      return
+    }
 
     var serverOptions: ServerOptions = {
       path: path,
@@ -46,9 +58,21 @@ export class RustLanguageServer {
       serverOptions,
       clientOptions
     )
-    client.onDidStop((err) => {
+    this.crashAlert = client.onDidStop(async (err) => {
       console.error(err)
-      console.log('onDidStop happened.')
+      let crashMsg = new NotificationRequest('server-crash')
+      crashMsg.title = nova.localize('Language Server Crash')
+      crashMsg.body = nova.localize(
+        'Rust Analyzer has crashed. If this issue persists after restarting, ' +
+          'please open a bug report and include console messages.'
+      )
+      crashMsg.actions = [nova.localize('Restart'), nova.localize('Ignore')]
+      let resp = await nova.notifications.add(crashMsg)
+      if (resp.actionIdx === 0) {
+        this.restart()
+      } else {
+        this.stop()
+      }
     })
 
     try {
@@ -66,6 +90,11 @@ export class RustLanguageServer {
   }
 
   stop() {
+    // Don't treat as crash if intentionally stopping it.
+    if (this.crashAlert) {
+      this.crashAlert.dispose()
+      this.crashAlert = null
+    }
     if (this.languageClient) {
       this.languageClient.stop()
       nova.subscriptions.remove(this.languageClient)
