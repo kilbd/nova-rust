@@ -43,9 +43,19 @@ export function getLatestBinary(): Promise<boolean> {
             headers: { Accept: 'application/vnd.github.v3+json' },
           }
         )
-        data = await ghResponse.json()
+        if (ghResponse.ok) {
+          data = await ghResponse.json()
+        } else {
+          console.error(
+            `Rust Analyzer version check returned status ${ghResponse.status}`
+          )
+          // If response status isn't 2xx, don't proceed with update.
+          resolve(false)
+        }
       } catch (err) {
         console.error(err)
+        // If this version query failed, the update should not proceed.
+        resolve(false)
       }
       raVersion =
         data.find(
