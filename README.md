@@ -4,11 +4,17 @@ This project brings [Rust Language](https://www.rust-lang.org/) support to the [
 
 ## Users
 
-Nova users can install this extension from Nova's [Extension Library](https://extensions.panic.com/), available within the app. More information for users is available in the [extension details](./Rust.novaextension/README.md).
+Nova users can install this extension from Nova's [Extension Library](https://extensions.panic.com/), available within the app. More information for users is available in the [extension details](https://github.com/kilbd/nova-rust/blob/main/Rust.novaextension/README.md).
 
 ## Developers
 
+### Requirements
+
+To help develop this extension, you'll need the Nova app, of course.
+
 To build the scripts for this extension, you will need [Node](https://nodejs.org/) installed (and the npm package manager that comes with it).
+
+### Setting Up the Dev Environment
 
 Start by running the `update_server.sh` script to download the Rust Analyzer binary, then rename it manually:
 
@@ -29,3 +35,7 @@ $ npm run build
 ```
 
 After the scripts are transpiled, you can test the extension in Nova by selecting **Extensions -> Activate Project as Extension**. Open a Rust project to see it in action. You can monitor logs and errors by selecting **Extensions -> Show Extension Console** from the menus in the Rust project.
+
+### Contributing
+
+If you'd like to contribute code, please see the [CONTRIBUTING.md](https://github.com/kilbd/nova-rust/blob/main/CONTRIBUTING.md) document for tips.
