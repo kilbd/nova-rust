@@ -25,7 +25,14 @@
       "title": "Format on Save",
       "description": "If enabled, files are formatted with `rustfmt` after saving.",
       "type": "boolean",
-      "default": "false"
+      "default": false
+    },
+    {
+      "key": "com.kilb.rust.rustfmt-nightly",
+      "title": "Use Rstfmt Nightly",
+      "description": "If Format on Save is enabled, this uses the latest and greatest Rustfmt features. You must have the nightly toolchain installed (i.e., have run `rustup component add rustfmt --toolchain nightly`).",
+      "type": "boolean",
+      "default": false
     }
   ]
 }
