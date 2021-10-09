@@ -76,7 +76,7 @@ export function getLatestBinary(): Promise<boolean> {
         shell: true,
       })
       downloadProcess.onStdout((line: string) => {
-        if (line === 'downloading new binary...') {
+        if (line.includes('downloading new binary...')) {
           newBinary = true
         }
       })
@@ -94,6 +94,7 @@ export function getLatestBinary(): Promise<boolean> {
 }
 
 export function replaceBinary() {
+  console.log('attempting to replace Rust Analyzer')
   nova.fs.remove(`${binPath}/rust-analyzer`)
   nova.fs.move(`${binPath}/rust-analyzer-new`, `${binPath}/rust-analyzer`)
 }
