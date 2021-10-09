@@ -1,10 +1,17 @@
 export class RustFormatter {
   private enabled: boolean = false
+  private nightly: boolean = false
 
   constructor() {
     nova.config.observe('com.kilb.rust.rustfmt-on-save', (enabled: boolean) => {
       this.enabled = enabled
     })
+    nova.config.observe(
+      'com.kilb.rust.rustfmt-nightly',
+      (useNightly: boolean) => {
+        this.nightly = useNightly
+      }
+    )
   }
 
   format(editor: TextEditor): Promise<void> {
@@ -13,7 +20,12 @@ export class RustFormatter {
         let fullRange = new Range(0, editor.document.length)
         let docText = editor.getTextInRange(fullRange)
         let formatOutput: string[] = []
+        let fmtArgs = []
+        if (this.nightly) {
+          fmtArgs.push('+nightly')
+        }
         let fmtProcess = new Process('rustfmt', {
+          args: fmtArgs,
           shell: true,
         })
         fmtProcess.onStderr((err: string) => console.error(err))
