@@ -28,12 +28,17 @@ export async function activate() {
   getLatestBinary().then((restart: boolean) => {
     console.log(`Update check finished.${restart ? ' Binary downloaded.' : ''}`)
     if (restart) {
-      langServer?.client?.onDidStop(() => {
-        console.log('Moving binary and restarting.')
+      if (langServer?.client) {
+        langServer.client.onDidStop(() => {
+          console.log('Moving binary and restarting.')
+          replaceBinary()
+          langServer?.start()
+        })
+        langServer?.stop()
+      } else {
         replaceBinary()
         langServer?.start()
-      })
-      langServer?.stop()
+      }
     }
   })
 }

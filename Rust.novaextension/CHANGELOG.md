@@ -1,3 +1,9 @@
+## Version 1.0.2
+
+### Fixed
+
+- Fixes issue where binary isn't renamed if language server isn't running. Sorry for the rapid updates, folks. I can't test this feature in development.
+
 ## Version 1.0.1
 
 ### Fixed
