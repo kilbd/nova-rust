@@ -27,19 +27,12 @@ export class RustFormatter {
         let fmtProcess = new Process('rustfmt', {
           args: fmtArgs,
           shell: true,
+          cwd: `${nova.workspace.path}`,
         })
         fmtProcess.onStderr((err: string) => console.error(err))
         fmtProcess.onStdout((line: string) => formatOutput.push(line))
         fmtProcess.onDidExit(async (status: number) => {
-          if (status !== 0) {
-            let notification = new NotificationRequest('rustfmt.error')
-            notification.title = nova.localize('rustfmt Failed')
-            notification.body = nova.localize(
-              'If this error persists, please create a bug report/issue.'
-            )
-            // No user actions configured, so I'm ignoring the returned promise.
-            nova.notifications.add(notification)
-          } else {
+          if (status === 0) {
             await editor.edit((edit: TextEditorEdit) => {
               edit.replace(fullRange, formatOutput.join(''))
             })
