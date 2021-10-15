@@ -316,6 +316,7 @@
               <capture number="0" name="rust.bracket" />
             </ends-with>
             <subscopes>
+              <include syntax="self" collection="comments" />
               <include syntax="self" collection="method-definition" />
             </subscopes>
           </scope>
