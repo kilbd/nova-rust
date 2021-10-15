@@ -57,6 +57,7 @@
     <include syntax="self" collection="imports" />
     <include syntax="self" collection="keywords" />
     <include syntax="self" collection="processing" />
+    <include syntax="self" collection="syntax" />
     <include syntax="self" collection="values" />
   </scopes>
   
@@ -758,5 +759,24 @@
       </scope>
     </collection>
     
+    <!-- !Syntax -->
+    <collection name="syntax">
+      <!-- https://doc.rust-lang.org/book/appendix-02-operators.html -->
+      <scope name="rust.operator">
+        <expression>(\+|\-|\*|/|%|\=|\=\=|!\=|\+\=|\-\=|\*\=|/\=|%\=|\&lt;|\&gt;|\&lt;\=|\&gt;=|&amp;&amp;|\||\|\=|\|\||!|\^|\^\=|&amp;|&amp;\=|\&lt;\&lt;|\&lt;\&lt;\=|\&gt;\&gt;|\&gt;\&gt;\=|\-\&gt;|\=\&gt;|\.\.|\.\.\=|\?|\@)</expression>
+      </scope>
+      <scope name="rust.dot">
+        <expression>\.</expression>
+      </scope>
+      <scope name="rust.bracket">
+        <expression>[\(\[\)\]]</expression>
+      </scope>
+      <scope name="rust.comma">
+        <expression>,</expression>
+      </scope>
+      <scope name="rust.semicolon">
+        <expression>;</expression>
+      </scope>
+  </collection>
   </collections>
 </syntax>
