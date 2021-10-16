@@ -50,13 +50,13 @@
   </surrounding-pairs>
   
   <scopes>
+    <include syntax="self" collection="attributes" />
     <include syntax="self" collection="blocks" />
     <include syntax="self" collection="comments" />
     <include syntax="self" collection="definitions" />
     <include syntax="self" collection="identifiers" />
     <include syntax="self" collection="imports" />
     <include syntax="self" collection="keywords" />
-    <include syntax="self" collection="processing" />
     <include syntax="self" collection="syntax" />
     <include syntax="self" collection="values" />
   </scopes>
@@ -119,6 +119,18 @@
       </scope>
     </collection>
     
+    <!-- !Attributes -->
+    <collection name="attributes">
+      <scope name="rust.processing.attribute">
+        <starts-with>
+          <expression>\#\!?\[</expression>
+        </starts-with>
+        <ends-with>
+          <expression>\]</expression>
+        </ends-with>
+      </scope>
+    </collection>
+    
     <!-- !Blocks -->
     <collection name="blocks">
       <scope name="rust.block">
@@ -141,11 +153,11 @@
     
     <!-- !Comments -->
     <collection name="comments">
-      <scope name="comment.single.rust">
+      <scope name="rust.comment.single">
         <expression>//(?:$|([^/!].*)$)</expression>
-        <capture number="1" name="comment.single.content.rust" />
+        <capture number="1" name="rust.comment.single.content" />
       </scope>
-      <scope name="comment.multiline.rust">
+      <scope name="rust.comment.multiline">
         <symbol type="comment">
           <context behavior="subtree" />
         </symbol>
@@ -156,34 +168,34 @@
           <expression>\*/</expression>
         </ends-with>
       </scope>
-      <scope name="string.docstring.rust">
+      <scope name="rust.string.docstring">
         <expression>//[/!](.*)$</expression>
-        <capture number="1" name="string.docstring.content.rust" />
+        <capture number="1" name="rust.string.docstring.content" />
       </scope>
     </collection>
     
     <!-- !Definitions -->
     <collection name="definitions">
       <!-- !Constant -->
-      <scope name="definition.constant.rust">
+      <scope name="rust.definition.constant">
         <symbol type="constant" scope="local" />
         <expression>\b(let)\s+(?!mut\s)([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
-        <capture number="1" name="keyword.construct.variable.rust" />
-        <capture number="2" name="identifier.constant.rust.name" />
-        <capture number="3" name="operator.rust" />
-        <capture number="4" name="identifier.type.rust" />
-        <capture number="5" name="operator.rust" />
+        <capture number="1" name="rust.keyword.construct.variable" />
+        <capture number="2" name="rust.identifier.constant.name" />
+        <capture number="3" name="rust.operator" />
+        <capture number="4" name="rust.identifier.type" />
+        <capture number="5" name="rust.operator" />
       </scope>
       <!-- !Variable -->
-      <scope name="definition.identifier.rust">
+      <scope name="rust.definition.identifier">
         <symbol type="variable" scope="local" />
         <expression>\b(let)\s+(mut)\s+([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
-        <capture number="1" name="keyword.construct.variable.rust" />
-        <capture number="2" name="keyword.modifier.rust" />
-        <capture number="3" name="identifier.rust.name" />
-        <capture number="4" name="operator.rust" />
-        <capture number="5" name="identifier.type.rust" />
-        <capture number="6" name="operator.rust" />
+        <capture number="1" name="rust.keyword.construct.variable" />
+        <capture number="2" name="rust.keyword.modifier" />
+        <capture number="3" name="rust.identifier.name" />
+        <capture number="4" name="rust.operator" />
+        <capture number="5" name="rust.identifier.type" />
+        <capture number="6" name="rust.operator" />
       </scope>
       <!-- !Struct -->
       <scope name="rust.definition.struct">
@@ -192,8 +204,8 @@
         </symbol>
         <starts-with>
           <expression>\b(pub)?\s*(struct)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*</expression>
-          <capture number="1" name="keyword.modifier.visibility.rust" />
-          <capture number="2" name="keyword.construct.struct.rust" />
+          <capture number="1" name="rust.keyword.modifier.visibility" />
+          <capture number="2" name="rust.keyword.construct.struct" />
           <capture number="3" name="rust.identifier.type.struct.name" />
         </starts-with>
         <ends-with>
@@ -205,8 +217,8 @@
             <symbol type="property" />
             <starts-with>
               <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)(:)</expression>
-              <capture number="1" name="identifier.property.rust.name" />
-              <capture number="2" name="punctuation.rust" />
+              <capture number="1" name="rust.identifier.property.name" />
+              <capture number="2" name="rust.punctuation" />
             </starts-with>
             <ends-with>
               <expression>(?&lt;=,|\})</expression>
@@ -428,20 +440,20 @@
     
     <!-- !Generics -->
     <collection name="generics">
-      <scope name="generic.type.rust">
+      <scope name="rust.generic.type">
         <starts-with>
           <expression>&lt;</expression>
-          <capture number="0" name="bracket.generic.rust" />
+          <capture number="0" name="rust.bracket.generic" />
         </starts-with>
         <ends-with>
           <expression>&gt;</expression>
-          <capture number="0" name="bracket.generic.rust" />
+          <capture number="0" name="rust.bracket.generic" />
         </ends-with>
         <subscopes>
           <include syntax="self" collection="generics" />
           <include syntax="self" collection="lifetimes" />
           <include syntax="self" collection="types" />
-          <scope name="punctuation.separator.rust">
+          <scope name="rust.punctuation.separator">
             <expression>,</expression>
           </scope>
         </subscopes>
@@ -633,21 +645,9 @@
     
     <!-- !Lifetimes -->
     <collection name="lifetimes">
-      <scope name="decorator.lifetime.rust">
+      <scope name="rust.decorator.lifetime">
         <expression>&apos;[a-zA-Z_][a-zA-Z0-9_]*</expression>
-        <capture number="0" name="identifier.decorator.lifetime.name.rust" />
-      </scope>
-    </collection>
-    
-    <!-- !Processing -->
-    <collection name="processing">
-      <scope name="rust.processing">
-        <starts-with>
-          <expression>\#\[</expression>
-        </starts-with>
-        <ends-with>
-          <expression>\]</expression>
-        </ends-with>
+        <capture number="0" name="rust.identifier.decorator.lifetime.name" />
       </scope>
     </collection>
     
@@ -694,17 +694,17 @@
     
     <!-- !Types -->
     <collection name="types">
-      <scope name="identifier.type.rust">
+      <scope name="rust.identifier.type">
         <expression>(\[)?([a-zA-Z_][a-zA-Z0-9_]*)(\])?</expression>
-        <capture number="1" name="operator.array.bracket.rust" />
-        <capture number="3" name="operator.array.bracket.rust" />
+        <capture number="1" name="rust.operator.array.bracket" />
+        <capture number="3" name="rust.operator.array.bracket" />
       </scope>
     </collection>
     
     <!-- !Values -->
     <collection name="values">
       <!-- Strings -->
-      <scope name="string.rust">
+      <scope name="rust.string">
         <starts-with>
           <expression>&quot;</expression>
         </starts-with>
@@ -712,12 +712,12 @@
           <expression>&quot;</expression>
         </ends-with>
         <subscopes>
-          <scope name="string.escaped.rust">
+          <scope name="rust.string.escaped">
             <expression>\\[\\&quot;]</expression>
           </scope>
         </subscopes>
       </scope>
-      <scope name="string.raw.rust">
+      <scope name="rust.string.raw">
         <starts-with>
           <expression>\br&quot;</expression>
         </starts-with>
@@ -725,7 +725,7 @@
           <expression>&quot;</expression>
         </ends-with>
       </scope>
-      <scope name="string.raw.quote.rust">
+      <scope name="rust.string.raw.quote">
         <starts-with>
           <expression>\br\#+&quot;</expression>
         </starts-with>
@@ -733,28 +733,28 @@
           <expression>&quot;\#+</expression>
         </ends-with>
       </scope>
-      <scope name="string.char.rust">
+      <scope name="rust.string.char">
         <expression>&apos;(.)&apos;</expression>
-        <capture number="1" name="value.char.rust" />
+        <capture number="1" name="rust.value.char" />
       </scope>
       <!-- Booleans -->
-      <scope name="value.boolean.rust">
+      <scope name="rust.value.boolean">
         <strings>
           <string>true</string>
           <string>false</string>
         </strings>
       </scope>
       <!-- Numbers -->
-      <scope name="value.number.float.rust">
+      <scope name="rustvalue.number.float">
         <expression>\b-?[0-9]+(?:\.[0-9]+)?(?:f32|f64)?\b</expression>
       </scope>
-      <scope name="value.number.integer.rust">
+      <scope name="rustvalue.number.integer">
           <expression>\b-?[0-9][0-9_]*(?:[iu](?:8|16|32|64|128|size))?\b</expression>
       </scope>
-      <scope name="value.number.hexadecimal.rust">
+      <scope name="rustvalue.number.hexadecimal">
         <expression>\b0[xX][a-fA-F0-9]+\b</expression>
       </scope>
-      <scope name="value.number.octal.rust">
+      <scope name="rustvalue.number.octal">
         <expression>\b0[0-7]+\b</expression>
       </scope>
     </collection>
