@@ -1,3 +1,9 @@
+## Version 1.0.4
+
+### Fixed
+
+- Syntax fixes for impl and struct blocks
+
 ## Version 1.0.3
 
 ### Fixed
