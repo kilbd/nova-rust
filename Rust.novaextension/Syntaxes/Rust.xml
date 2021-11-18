@@ -111,6 +111,7 @@
               <expression>(?=\)|,)</expression>
             </ends-with>
             <subscopes>
+              <include syntax="self" collection="generics" />
               <include syntax="self" collection="qualified-types" />
               <include syntax="self" collection="types" />
             </subscopes>
@@ -176,26 +177,75 @@
     
     <!-- !Definitions -->
     <collection name="definitions">
+      <!-- !Computed Constant -->
+      <scope name="rust.definition.constant.static">
+        <symbol type="constant" scope="global" />
+        <starts-with>
+          <expression>\b(static|const)\s+([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*</expression>
+          <capture number="1" name="rust.keyword.modifier.construct.variable" />
+          <capture number="2" name="rust.identifier.constant.name" />
+          <capture number="3" name="rust.operator" />
+        </starts-with>
+        <ends-with>
+          <expression>(\=)(?!\=)|(\;)</expression>
+          <capture number="1" name="rust.operator" />
+          <capture number="2" name="rust.semicolon" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="generics" />
+          <include syntax="self" collection="qualified-types" />
+          <include syntax="self" collection="types" />
+          <cut-off>
+                <expression>(?=let|const|static|\{|\})</expression>
+          </cut-off>
+        </subscopes>
+      </scope>
       <!-- !Constant -->
-      <scope name="rust.definition.constant">
-        <symbol type="constant" scope="local" />
-        <expression>\b(let)\s+(?!mut\s)([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
-        <capture number="1" name="rust.keyword.construct.variable" />
-        <capture number="2" name="rust.identifier.constant.name" />
-        <capture number="3" name="rust.operator" />
-        <capture number="4" name="rust.identifier.type" />
-        <capture number="5" name="rust.operator" />
+      <scope name="rust.definition.immutable"> <!-- .identifier omitted to prevent bug -->
+        <symbol type="variable" scope="global" />
+        <starts-with>
+          <expression>\b(let)\s+(?!mut\s)([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*</expression>
+          <capture number="1" name="rust.keyword.construct.variable" />
+          <capture number="2" name="rust.identifier.name" />
+          <capture number="3" name="rust.operator" />
+        </starts-with>
+        <ends-with>
+          <expression>(\=)(?!\=)|(\;)</expression>
+          <capture number="1" name="rust.operator" />
+          <capture number="2" name="rust.semicolon" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="generics" />
+          <include syntax="self" collection="qualified-types" />
+          <include syntax="self" collection="types" />
+          <cut-off>
+                  <expression>(?=let|const|static|\{|\})</expression>
+          </cut-off>
+        </subscopes>
       </scope>
       <!-- !Variable -->
-      <scope name="rust.definition.identifier">
-        <symbol type="variable" scope="local" />
-        <expression>\b(let)\s+(mut)\s+([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*([a-zA-Z_][a-zA-Z0-9_]*)?\s*(\=)(?!\=)</expression>
-        <capture number="1" name="rust.keyword.construct.variable" />
-        <capture number="2" name="rust.keyword.modifier" />
-        <capture number="3" name="rust.identifier.name" />
-        <capture number="4" name="rust.operator" />
-        <capture number="5" name="rust.identifier.type" />
-        <capture number="6" name="rust.operator" />
+      <scope name="rust.definition.mutable"> <!-- .identifier omitted to prevent bug -->
+        <symbol type="variable" scope="global" />
+        <starts-with>
+          <expression>\b(let)\s+(mut)\s+([a-zA-Z_][a-zA-Z0-9_]*)(:)?\s*</expression>
+          <capture number="1" name="rust.keyword.construct.variable" />
+          <capture number="2" name="rust.keyword.modifier" />
+          <capture number="3" name="rust.identifier.name" />
+          <capture number="4" name="rust.operator" />
+        </starts-with>
+        <ends-with>
+          <expression>(\=)(?!\=)|(\;)</expression>
+          <capture number="1" name="rust.operator" />
+          <capture number="2" name="rust.semicolon" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="generics" />
+          <include syntax="self" collection="qualified-types" />
+          <include syntax="self" collection="types" />
+          <cut-off>
+                  <expression>(let|const|static|\{|\})</expression>
+          </cut-off>
+        </subscopes>
       </scope>
       <!-- !Struct -->
       <scope name="rust.definition.struct">
@@ -226,12 +276,13 @@
               <scope name="rust.definition.property.struct">
                 <symbol type="property" />
                 <starts-with>
-                  <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)(:)</expression>
-                  <capture number="1" name="rust.identifier.property.name" />
-                  <capture number="2" name="rust.punctuation" />
+                  <expression>(pub\s+)?\b([a-zA-Z_][a-zA-Z0-9_]*)(:)</expression>
+                  <capture number="1" name="rust.keyword.modifier.visibility" />
+                  <capture number="2" name="rust.identifier.property.name" />
+                  <capture number="3" name="rust.punctuation" />
                 </starts-with>
                 <ends-with>
-                  <expression>(?&lt;=,|\})</expression>
+                  <expression>(?&lt;=,|\})|(?=[\w\n\s]\})</expression>
                 </ends-with>
                 <subscopes>
                   <include syntax="self" collection="generics" />
@@ -464,6 +515,7 @@
         <subscopes>
           <include syntax="self" collection="generics" />
           <include syntax="self" collection="lifetimes" />
+          <include syntax="self" collection="qualified-types" />
           <include syntax="self" collection="types" />
           <scope name="rust.punctuation.separator">
             <expression>,</expression>
@@ -667,7 +719,7 @@
     <collection name="qualified-types">
       <scope name="rust.type.qualified">
         <starts-with>
-          <expression>&amp;</expression>
+          <expression>&amp;|\*</expression>
           <capture number="0" name="rust.operator.pointer" />
         </starts-with>
         <ends-with>
@@ -677,6 +729,7 @@
           <include syntax="self" collection="lifetimes" optional="true" />
           <scope name="rust.keyword.modifier" optional="true">
             <strings>
+              <string>const</string>
               <string>mut</string>
             </strings>
           </scope>
@@ -694,7 +747,7 @@
           <capture number="2" name="rust.bracket" />
         </starts-with>
         <ends-with>
-          <expression>(\))|(?=\{|\,|\;)|$</expression>
+          <expression>(\))|(?=\{|\,(?![\w\,\s]*&gt;{1}?)|\;(?![\w\d\s]*\]{1}?))|$</expression>
           <capture number="1" name="rust.bracket" />
         </ends-with>
         <subscopes>
@@ -707,9 +760,14 @@
     <!-- !Types -->
     <collection name="types">
       <scope name="rust.identifier.type">
-        <expression>(\[)?([a-zA-Z_][a-zA-Z0-9_]*)(\])?</expression>
-        <capture number="1" name="rust.operator.array.bracket" />
-        <capture number="3" name="rust.operator.array.bracket" />
+        <expression>(\[)?([a-zA-Z_][a-zA-Z0-9_]*)(?:(\;)\s*(\d))?(\])?</expression>
+        <capture number="1" name="rust.array.bracket" />
+        <capture number="3" name="rust.operator.array.semicolon" />
+        <capture number="4" name="rust.array.value.number" />
+        <capture number="5" name="rust.array.bracket" />
+      </scope>
+      <scope name="rust.type.empty">
+        <expression>\(\)</expression>
       </scope>
     </collection>
     
@@ -757,16 +815,16 @@
         </strings>
       </scope>
       <!-- Numbers -->
-      <scope name="rustvalue.number.float">
+      <scope name="rust.value.number.float">
         <expression>\b-?[0-9]+(?:\.[0-9]+)?(?:f32|f64)?\b</expression>
       </scope>
-      <scope name="rustvalue.number.integer">
+      <scope name="rust.value.number.integer">
           <expression>\b-?[0-9][0-9_]*(?:[iu](?:8|16|32|64|128|size))?\b</expression>
       </scope>
-      <scope name="rustvalue.number.hexadecimal">
+      <scope name="rust.value.number.hexadecimal">
         <expression>\b0[xX][a-fA-F0-9]+\b</expression>
       </scope>
-      <scope name="rustvalue.number.octal">
+      <scope name="rust.value.number.octal">
         <expression>\b0[0-7]+\b</expression>
       </scope>
     </collection>
