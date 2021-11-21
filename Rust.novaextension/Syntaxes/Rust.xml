@@ -261,37 +261,7 @@
         <ends-with />
         <subscopes anchored="true">
           <include syntax="self" collection="generics" optional="true" />
-          <scope name="rust.definition.struct.block">
-            <starts-with>
-              <expression>\{</expression>
-              <capture number="0" name="rust.bracket" />
-            </starts-with>
-            <ends-with>
-              <expression>\}</expression>
-              <capture number="0" name="rust.bracket" />
-            </ends-with>
-            <subscopes>
-              <include syntax="self" collection="comments" />
-              <include syntax="self" collection="attributes" />
-              <scope name="rust.definition.property.struct">
-                <symbol type="property" />
-                <starts-with>
-                  <expression>(pub\s+)?\b([a-zA-Z_][a-zA-Z0-9_]*)(:)</expression>
-                  <capture number="1" name="rust.keyword.modifier.visibility" />
-                  <capture number="2" name="rust.identifier.property.name" />
-                  <capture number="3" name="rust.punctuation" />
-                </starts-with>
-                <ends-with>
-                  <expression>(?&lt;=,|\})|(?=[\w\n\s]\})</expression>
-                </ends-with>
-                <subscopes>
-                  <include syntax="self" collection="generics" />
-                  <include syntax="self" collection="qualified-types" />
-                  <include syntax="self" collection="types" />
-                </subscopes>
-              </scope>
-            </subscopes>
-          </scope>
+          <include syntax="self" collection="struct-definition-body" optional="true" />
         </subscopes>
       </scope>
       <!-- !Enum -->
@@ -305,43 +275,56 @@
           <capture number="2" name="rust.keyword.construct.enum" />
           <capture number="3" name="rust.identifier.type.enum.name" />
         </starts-with>
-        <ends-with>
-          <expression>(?&lt;=\}|;)</expression>
-        </ends-with>
-        <subscopes>
-          <scope name="rust.definition.enum.member">
-            <symbol type="enum-member" />
+        <ends-with />
+        <subscopes anchored="true">
+          <scope name="rust.definition.enum.block">
             <starts-with>
-              <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)</expression>
-              <capture number="1" name="rust.identifier.enum.member.name" />
+              <expression>\{</expression>
+              <capture number="0" name="rust.bracket" />
             </starts-with>
             <ends-with>
-              <expression>(?&lt;=,|\})</expression>
+              <expression>\}</expression>
+              <capture number="0" name="rust.bracket" />
             </ends-with>
             <subscopes>
-              <scope name="rust.definition.enum.member.type">
+              <include syntax="self" collection="comments" />
+              <include syntax="self" collection="attributes" />
+              <scope name="rust.definition.enum.member">
+                <symbol type="enum-member" />
                 <starts-with>
-                  <expression>\(</expression>
-                </starts-with>
-                <ends-with>
-                  <expression>\)</expression>
-                </ends-with>
-                <subscopes>
-                  <include syntax="self" collection="types" />
-                </subscopes>
-              </scope>
-              <scope name="rust.definition.enum.member.value">
-                <starts-with>
-                  <expression>=</expression>
-                  <capture number="0" name="rust.operator" />
+                  <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)</expression>
+                  <capture number="1" name="rust.identifier.enum.member.name" />
                 </starts-with>
                 <ends-with>
                   <expression>(?&lt;=,|\})</expression>
                 </ends-with>
                 <subscopes>
-                  <include syntax="self" collection="values" />
-                </subscopes>
-              </scope>
+                  <include syntax="self" collection="struct-definition-body" />
+                  <scope name="rust.definition.enum.member.type">
+                    <starts-with>
+                      <expression>\(</expression>
+                    </starts-with>
+                    <ends-with>
+                      <expression>\)</expression>
+                    </ends-with>
+                    <subscopes>
+                      <include syntax="self" collection="types" />
+                    </subscopes>
+                    </scope>
+                    <scope name="rust.definition.enum.member.value">
+                      <starts-with>
+                        <expression>=</expression>
+                        <capture number="0" name="rust.operator" />
+                      </starts-with>
+                      <ends-with>
+                        <expression>(?&lt;=,|\})</expression>
+                      </ends-with>
+                      <subscopes>
+                        <include syntax="self" collection="values" />
+                      </subscopes>
+                    </scope>
+                  </subscopes>
+                </scope>
             </subscopes>
           </scope>
         </subscopes>
@@ -460,6 +443,7 @@
         </subscopes>
       </scope>
     </collection>
+    
     <collection name="method-definition">
       <scope name="rust.definition.method">
         <symbol type="method">
@@ -477,6 +461,40 @@
           <include syntax="self" collection="arguments" />
           <include syntax="self" collection="return-types" optional="true" />
           <include syntax="self" collection="function-blocks" />
+        </subscopes>
+      </scope>
+    </collection>
+    
+    <collection name="struct-definition-body">
+      <scope name="rust.definition.struct.block">
+        <starts-with>
+          <expression>\{</expression>
+          <capture number="0" name="rust.bracket" />
+        </starts-with>
+        <ends-with>
+          <expression>\}</expression>
+          <capture number="0" name="rust.bracket" />
+        </ends-with>
+        <subscopes>
+          <include syntax="self" collection="comments" />
+          <include syntax="self" collection="attributes" />
+          <scope name="rust.definition.property.struct">
+            <symbol type="property" />
+            <starts-with>
+              <expression>\b(?:(pub)\s+)?([a-zA-Z_][a-zA-Z0-9_]*)(:)</expression>
+              <capture number="1" name="rust.keyword.modifier.visibility" />
+              <capture number="2" name="rust.identifier.property.name" />
+              <capture number="3" name="rust.punctuation" />
+            </starts-with>
+            <ends-with>
+              <expression>(?&lt;=,|\})|(?=[\w\n\s]\})</expression>
+            </ends-with>
+            <subscopes>
+              <include syntax="self" collection="generics" />
+              <include syntax="self" collection="qualified-types" />
+              <include syntax="self" collection="types" />
+            </subscopes>
+          </scope>
         </subscopes>
       </scope>
     </collection>
