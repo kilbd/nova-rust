@@ -1,3 +1,9 @@
+## Version 1.0.5
+
+### Fixed
+
+- Syntax fixes for structs, enums, and more – mostly from a user! Thanks @mirnovov!
+
 ## Version 1.0.4
 
 ### Fixed

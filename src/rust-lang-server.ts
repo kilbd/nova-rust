@@ -39,7 +39,7 @@ export class RustLanguageServer {
         path: '/bin/bash',
         args: [
           '-c',
-          `${path} | tee "${nova.extension.path}/../logs/rust-lang-server.log"`,
+          `tee "${nova.extension.path}/../logs/nova-client.log" | ${path} | tee "${nova.extension.path}/../logs/lang-server.log"`,
         ],
       }
     }
