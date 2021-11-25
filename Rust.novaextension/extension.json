@@ -21,7 +21,6 @@
 
   "config": [
     {
-      "key": "com.kilb.rust.format-section",
       "title": "Formatting",
       "type": "section",
       "children": [
@@ -42,7 +41,6 @@
       ]
     },
     {
-      "key": "com.kilb.rust.lint-section",
       "title": "Issues",
       "description": "Configure the source of Nova Issues created after saving files.",
       "type": "section",

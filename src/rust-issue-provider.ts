@@ -4,12 +4,22 @@
  */
 export class RustIssueProvider {
   private collection = new IssueCollection()
-  constructor() {}
+  private command: string = 'check'
+  private checkArgs: string[] = []
+
+  constructor() {
+    nova.config.observe('com.kilb.rust.lint-command', (cmd: string) => {
+      this.command = cmd
+    })
+    nova.config.observe('com.kilb.rust.lint-args', (args: string | null) => {
+      if (args) this.checkArgs = args.trim().split(' ')
+    })
+  }
 
   run() {
     this.collection.clear()
     let process = new Process('cargo', {
-      args: ['check', '--message-format=json'],
+      args: [this.command, '--message-format=json', ...this.checkArgs],
       cwd: nova.workspace.path as string,
       shell: true,
     })
