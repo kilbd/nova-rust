@@ -8,6 +8,7 @@
   "license": "MIT",
   "version": "1.0.5",
   "categories": ["languages", "formatters"],
+  "min_runtime": "9.0",
 
   "main": "main.js",
 
@@ -21,18 +22,75 @@
 
   "config": [
     {
-      "key": "com.kilb.rust.rustfmt-on-save",
-      "title": "Format on Save",
-      "description": "If enabled, files are formatted with `rustfmt` after saving.",
-      "type": "boolean",
-      "default": false
+      "title": "Formatting",
+      "type": "section",
+      "children": [
+        {
+          "key": "com.kilb.rust.rustfmt-on-save",
+          "title": "Format on Save",
+          "description": "If enabled, files are formatted with `rustfmt` after saving.",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "key": "com.kilb.rust.rustfmt-nightly",
+          "title": "Use Rstfmt Nightly",
+          "description": "If Format on Save is enabled, this uses the latest and greatest Rustfmt features. You must have the nightly toolchain installed (i.e., have run `rustup component add rustfmt --toolchain nightly`).",
+          "type": "boolean",
+          "default": false
+        }
+      ]
     },
     {
-      "key": "com.kilb.rust.rustfmt-nightly",
-      "title": "Use Rstfmt Nightly",
-      "description": "If Format on Save is enabled, this uses the latest and greatest Rustfmt features. You must have the nightly toolchain installed (i.e., have run `rustup component add rustfmt --toolchain nightly`).",
-      "type": "boolean",
-      "default": false
+      "title": "Issues",
+      "description": "Configure the source of Nova Issues created after saving files.",
+      "type": "section",
+      "children": [
+        {
+          "key": "com.kilb.rust.lint-command",
+          "title": "(Cargo) Lint Command",
+          "link": "https://github.com/rust-lang/rust-clippy#clippy",
+          "type": "enum",
+          "values": [
+            ["check", "check (compiler warnings)"],
+            ["clippy", "clippy (compiler + Clippy warnings)"]
+          ],
+          "default": "check"
+        },
+        {
+          "key": "com.kilb.rust.lint-args",
+          "title": "Additional Arguments",
+          "description": "Arguments to pass to the Cargo lint command you selected.",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "configWorkspace": [
+    {
+      "title": "Issues",
+      "description": "Configure the source of Nova Issues created after saving files.",
+      "type": "section",
+      "children": [
+        {
+          "key": "com.kilb.rust.lint-command",
+          "title": "(Cargo) Lint Command",
+          "link": "https://github.com/rust-lang/rust-clippy#clippy",
+          "type": "enum",
+          "values": [
+            [null, "Use global setting"],
+            ["check", "check (compiler warnings)"],
+            ["clippy", "clippy (compiler + Clippy warnings)"]
+          ],
+          "default": null
+        },
+        {
+          "key": "com.kilb.rust.lint-args",
+          "title": "Additional Arguments",
+          "description": "Arguments to pass to the Cargo lint command you selected.",
+          "type": "string"
+        }
+      ]
     }
   ]
 }

@@ -11,6 +11,7 @@ This extension assumes you have common Rust tools installed on your Mac:
 - **Rust** (the `rustc` compiler)
 - **Cargo** for managing projects
 - **Rustfmt** for formatting documents
+- **Clippy** for extra code linting (optional)
 
 The best way to install these requirements and keep them updated is by using the [rustup](https://rustup.rs/) tool. Copy the command at that link into a terminal and run it. Rustup also allows you to switch between Rust versions (e.g., stable or nightly). In-depth documentation on how to use it can be found [here](https://rust-lang.github.io/rustup/).
 
@@ -37,6 +38,10 @@ You can also configure preferences on a per-project basis in **Project → Proje
 ### Save on Format
 
 Checking this checkbox will run `rustfmt` on a Rust document when you save it. A `rustfmt.toml` configuration file in you project is highly encouraged!
+
+### Clippy Warnings
+
+Setting the Issues command to `clippy` will add extra lint warnings from Clippy to Issues. This extension defaults to only showing compiler warnings.
 
 ## Entitlements
 

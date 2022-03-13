@@ -4,12 +4,22 @@
  */
 export class RustIssueProvider {
   private collection = new IssueCollection()
-  constructor() {}
+  private command: string = 'check'
+  private checkArgs: string[] = []
+
+  constructor() {
+    nova.config.observe('com.kilb.rust.lint-command', (cmd: string) => {
+      this.command = cmd
+    })
+    nova.config.observe('com.kilb.rust.lint-args', (args: string | null) => {
+      if (args) this.checkArgs = args.trim().split(' ')
+    })
+  }
 
   run() {
     this.collection.clear()
     let process = new Process('cargo', {
-      args: ['check', '--message-format=json'],
+      args: [this.command, '--message-format=json', ...this.checkArgs],
       cwd: nova.workspace.path as string,
       shell: true,
     })
@@ -32,10 +42,9 @@ export class RustIssueProvider {
       )?.message
       let code = data.message.code?.code
       issues.push(this.generateIssue(data.message, code, note))
-      let hint = data.message.children.find((item) => item.level == 'help')
-      if (hint) {
-        issues.push(this.generateIssue(hint))
-      }
+      data.message.children
+        .filter((item) => item.level === 'help' && item.spans.length > 0)
+        .forEach((item) => issues.push(this.generateIssue(item, code)))
       let filename = data.message.spans.find(
         (item) => item.is_primary
       )?.file_name
@@ -58,7 +67,7 @@ export class RustIssueProvider {
       issue.message = data.message
     }
     if (code) issue.code = code
-    issue.source = 'rustc'
+    issue.source = code && code.indexOf('clippy') !== -1 ? 'clippy' : 'rustc'
     switch (data.level) {
       case 'error':
         issue.severity = IssueSeverity.Error
@@ -78,6 +87,9 @@ export class RustIssueProvider {
     issue.endLine = issueSpan?.line_end
     issue.column = issueSpan?.column_start
     issue.endColumn = issueSpan?.column_end
+    if (issueSpan?.suggested_replacement) {
+      issue.message += `\n${issueSpan.suggested_replacement}`
+    }
     return issue
   }
 }
