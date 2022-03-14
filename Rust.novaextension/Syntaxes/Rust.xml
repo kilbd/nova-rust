@@ -354,7 +354,7 @@
           <context behavior="next" group-by-name="true" foldable="false" unclosed="truncate" />
         </symbol>
         <starts-with>
-          <expression>(impl)</expression>
+          <expression>\b(impl)\b</expression>
           <capture number="0" name="rust.keyword.construct" />
         </starts-with>
         <ends-with />

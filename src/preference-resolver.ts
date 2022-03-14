@@ -7,7 +7,6 @@ export function onPreferenceChange(
   let global: any
   let local: any
   nova.config.observe(name, (newValue: any, _oldValue: any) => {
-    console.log(`global pref change: ${name}`)
     global = newValue
     if (append && local) {
       callback(newValue.concat(local))
@@ -16,7 +15,6 @@ export function onPreferenceChange(
     }
   })
   nova.workspace.config.observe(name, (newValue: any, _oldValue: any) => {
-    console.log(`local pref change: ${name}`)
     local = newValue
     if (append && global) {
       callback(global.concat(newValue))
