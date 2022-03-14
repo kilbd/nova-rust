@@ -15,8 +15,13 @@ export class RustFormatter {
   }
 
   format(editor: TextEditor): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      if (this.enabled && editor.document.path?.substr(-3) === '.rs') {
+    return new Promise<void>((resolve, _reject) => {
+      let savedDoc = editor.document.path
+      if (this.enabled && savedDoc?.substr(-3) === '.rs') {
+        let formatConfig = this.findFormatFile(
+          savedDoc.substring(0, savedDoc.lastIndexOf('/'))
+        )
+        console.log(`Format config to use: ${formatConfig.path}`)
         let fullRange = new Range(0, editor.document.length)
         let docText = editor.getTextInRange(fullRange)
         let formatOutput: string[] = []
@@ -48,4 +53,36 @@ export class RustFormatter {
       }
     })
   }
+
+  private findFormatFile(path: string): FmtConfig {
+    let fmtToml: string | null = null
+    let cargoToml: string | null = null
+    const items = nova.fs.listdir(path)
+    items.forEach((item: string) => {
+      const itemPath = `${path}/${item}`
+      const stats = nova.fs.stat(itemPath)
+      if (
+        stats?.isFile() &&
+        (item === 'rustfmt.toml' || item === '.rustfmt.toml')
+      ) {
+        fmtToml = itemPath
+      } else if (stats?.isFile() && item === 'Cargo.toml') {
+        cargoToml = itemPath
+      }
+    })
+    // rustfmt config has the highest precedence
+    if (fmtToml) {
+      return { isFmtFile: true, path: path }
+    } else if (cargoToml) {
+      return { isFmtFile: false, path: cargoToml }
+    } else {
+      // If none found, search parent directory.
+      return this.findFormatFile(path.substring(0, path.lastIndexOf('/')))
+    }
+  }
+}
+
+interface FmtConfig {
+  isFmtFile: Boolean
+  path: string
 }
