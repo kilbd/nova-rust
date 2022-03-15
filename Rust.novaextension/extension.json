@@ -6,7 +6,7 @@
   "repository": "https://github.com/kilbd/nova-rust",
   "bugs": "https://github.com/kilbd/nova-rust/issues",
   "license": "MIT",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "categories": ["languages", "formatters"],
   "min_runtime": "9.0",
 

@@ -1,3 +1,20 @@
+## Version 2.0.0
+
+The full version bump is mostly due to setting the minimum Nova version to 9, which contains many language server client fixes.
+
+### New
+
+- Preference for using Clippy for generating issues; can be configured per project.
+
+### Improved
+
+- Inspects the nearest Cargo.toml for the Rust edition to use with `rustfmt` so a rustfmt.toml isn't required to avoid format-on-save errors caused by editions.
+- Nova language server client is now reliable enough to use Rust Analyzer for generating issues instead of my custom provider (breaking change and reason for version bump).
+
+### Fixed
+
+- Syntax no longer highlights 'impl' within words
+
 ## Version 1.0.5
 
 ### Fixed
