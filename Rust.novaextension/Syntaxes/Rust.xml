@@ -588,7 +588,7 @@
         <expression>(?&lt;=\.)([a-zA-Z_\$][A-Za-z0-9_]*)\b(?!\()</expression>
       </scope>
       <scope name="rust.identifier.property.static">
-        <expression>(?&lt;=\:\:)([a-zA-Z_\$][A-Za-z0-9_]*)\b(?!\()</expression>
+        <expression>(?&lt;=\:\:)([a-zA-Z_\$][A-Za-z0-9_]*)\b(?![!\(])</expression>
       </scope>
       <scope name="rust.identifier.method">
         <expression>(?&lt;=\.)([a-zA-Z_\$][A-Za-z0-9_]*)(?=\()</expression>
@@ -601,7 +601,7 @@
       </scope>
       <!-- Calling a macro markup is silly, but does make it stand out. -->
       <scope name="rust.identifier.global.function.markup.bold.macro">
-        <expression>(?&lt;!\.)((?:\b[a-zA-Z_])[A-Za-z0-9_]*)\!(?=\()</expression>
+        <expression>(?&lt;!\.)\b[a-zA-Z_][A-Za-z0-9_]*\!(?=\()</expression>
       </scope>
     </collection>
     
@@ -797,11 +797,24 @@
           <expression>&quot;</expression>
         </starts-with>
         <ends-with>
-          <expression>&quot;</expression>
+          <expression>(?&lt;!\\)&quot;</expression>
         </ends-with>
         <subscopes>
-          <scope name="rust.string.escaped">
-            <expression>\\[\\&quot;]</expression>
+          <scope name="rust.string.escape">
+            <expression>\\[\\&quot;nrt]</expression>
+          </scope>
+          <scope name="rust.string-template">
+            <starts-with>
+            <expression>(?&lt;!{){(?!{)</expression>
+            </starts-with>
+            <ends-with>
+              <expression>(?&lt;!})}(?!})</expression>
+            </ends-with>
+            <subscopes>
+              <scope name="rust.string-template.value">
+                <expression>[a-zA-Z_][a-zA-Z0-9_]*</expression>
+              </scope>
+            </subscopes>
           </scope>
         </subscopes>
       </scope>
@@ -819,6 +832,14 @@
         </starts-with>
         <ends-with>
           <expression>&quot;\#+</expression>
+        </ends-with>
+      </scope>
+      <scope name="rust.string.byte">
+        <starts-with>
+          <expression>\bb&quot;</expression>
+        </starts-with>
+        <ends-with>
+          <expression>&quot;</expression>
         </ends-with>
       </scope>
       <scope name="rust.string.char">
