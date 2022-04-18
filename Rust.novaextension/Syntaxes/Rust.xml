@@ -335,10 +335,11 @@
           <context behavior="subtree" foldable="false" />
         </symbol>
         <starts-with>
-          <expression>\b(?:(pub)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <expression>\b(?:(pub)\s+)?(?:(const)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
           <capture number="1" name="rust.keyword.modifier.visibility" />
-          <capture number="2" name="rust.keyword.construct.function" />
-          <capture number="3" name="rust.identifier.function.name" />
+          <capture number="2" name="rust.keyword.modifier.mutability" />
+          <capture number="3" name="rust.keyword.construct.function" />
+          <capture number="4" name="rust.identifier.function.name" />
         </starts-with>
         <ends-with />
         <subscopes anchored="true">
@@ -450,10 +451,11 @@
           <context behavior="subtree" foldable="false" />
         </symbol>
         <starts-with>
-          <expression>\b(?:(pub)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <expression>\b(?:(pub)\s+)?(?:(const)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
           <capture number="1" name="rust.keyword.modifier.visibility" />
-          <capture number="2" name="rust.keyword.construct" />
-          <capture number="3" name="rust.identifier.method.name" />
+          <capture number="2" name="rust.keyword.modifier.mutability" />
+          <capture number="3" name="rust.keyword.construct" />
+          <capture number="4" name="rust.identifier.method.name" />
         </starts-with>
         <ends-with />
         <subscopes anchored="true">
