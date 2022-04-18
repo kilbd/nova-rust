@@ -863,7 +863,7 @@
           <expression>\b-?[0-9][0-9_]*(?:[iu](?:8|16|32|64|128|size))?\b</expression>
       </scope>
       <scope name="rust.value.number.hexadecimal">
-        <expression>\b0[xX][a-fA-F0-9]+\b</expression>
+        <expression>\b0[xX][a-fA-F0-9][a-fA-F0-9_]*\b</expression>
       </scope>
       <scope name="rust.value.number.octal">
         <expression>\b0[0-7]+\b</expression>
