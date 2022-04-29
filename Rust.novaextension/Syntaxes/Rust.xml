@@ -250,7 +250,7 @@
       <!-- !Struct -->
       <scope name="rust.definition.struct">
         <symbol type="struct">
-          <context behavior="start" group-by-name="true" unclosed="truncate" />
+          <context behavior="subtree" />
         </symbol>
         <starts-with>
           <expression>\b(pub)?\s*(struct)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*</expression>
@@ -267,7 +267,7 @@
       <!-- !Enum -->
       <scope name="rust.definition.enum">
         <symbol type="enum">
-          <context behavior="start" group-by-name="true" />
+          <context behavior="subtree" group-by-name="true" />
         </symbol>
         <starts-with>
           <expression>\b(pub)?\s*(enum)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*</expression>
@@ -351,8 +351,11 @@
       </scope>
       <!-- !Methods -->
       <scope name="rust.definition.implementation">
-        <symbol>
-          <context behavior="next" group-by-name="true" foldable="false" unclosed="truncate" />
+        <symbol type="category">
+          <context behavior="subtree" />
+          <display-name>
+            <component variable="name" append=" Methods" />
+          </display-name>
         </symbol>
         <starts-with>
           <expression>\b(impl)\b</expression>
