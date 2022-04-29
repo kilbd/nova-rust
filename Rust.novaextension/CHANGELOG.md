@@ -1,3 +1,13 @@
+## Version 2.0.1
+
+### Improved
+
+Syntax improvements:
+
+- Better parsing of `impl` blocks for highlighting and symbols
+- Highlight more escaped characters and format characters in strings
+- Fix hex literals with underscores and `const` functions
+
 ## Version 2.0.0
 
 The full version bump is mostly due to setting the minimum Nova version to 9, which contains many language server client fixes.
