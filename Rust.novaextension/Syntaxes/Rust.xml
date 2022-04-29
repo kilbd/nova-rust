@@ -250,7 +250,7 @@
       <!-- !Struct -->
       <scope name="rust.definition.struct">
         <symbol type="struct">
-          <context behavior="start" group-by-name="true" unclosed="truncate" />
+          <context behavior="subtree" />
         </symbol>
         <starts-with>
           <expression>\b(pub)?\s*(struct)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*</expression>
@@ -267,7 +267,7 @@
       <!-- !Enum -->
       <scope name="rust.definition.enum">
         <symbol type="enum">
-          <context behavior="start" group-by-name="true" />
+          <context behavior="subtree" group-by-name="true" />
         </symbol>
         <starts-with>
           <expression>\b(pub)?\s*(enum)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*</expression>
@@ -335,10 +335,11 @@
           <context behavior="subtree" foldable="false" />
         </symbol>
         <starts-with>
-          <expression>\b(?:(pub)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <expression>\b(?:(pub)\s+)?(?:(const)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
           <capture number="1" name="rust.keyword.modifier.visibility" />
-          <capture number="2" name="rust.keyword.construct.function" />
-          <capture number="3" name="rust.identifier.function.name" />
+          <capture number="2" name="rust.keyword.modifier.mutability" />
+          <capture number="3" name="rust.keyword.construct.function" />
+          <capture number="4" name="rust.identifier.function.name" />
         </starts-with>
         <ends-with />
         <subscopes anchored="true">
@@ -348,14 +349,64 @@
           <include syntax="self" collection="function-blocks" />
         </subscopes>
       </scope>
-      <!-- !Methods -->
-      <scope name="rust.definition.implementation">
-        <symbol>
-          <context behavior="next" group-by-name="true" foldable="false" unclosed="truncate" />
+      <!-- !Trait Method Implementations -->
+      <scope name="rust.definition.implementation.protocol">
+        <symbol type="category">
+          <context behavior="subtree" />
+          <display-name>
+            <component selector="identifier.type.struct" />
+            <component selector="identifier.type.protocol.name" prepend=" - implement " />
+          </display-name>
         </symbol>
         <starts-with>
-          <expression>\b(impl)\b</expression>
-          <capture number="0" name="rust.keyword.construct" />
+          <expression>\b(impl)\b(?=[^\{]*\bfor\b)</expression>
+          <capture number="1" name="rust.keyword.construct" />
+        </starts-with>
+        <ends-with />
+        <subscopes anchored="true">
+          <include syntax="self" collection="generics" optional="true" />
+          <scope name="rust.identifier.type.protocol">
+            <expression>\b([a-zA-Z_][a-zA-Z0-9_]*(::))*([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+            <capture number="1" name="rust.identifier.path" />
+            <capture number="2" name="rust.operator.path" />
+            <capture number="3" name="rust.identifier.type.protocol.name" />
+          </scope>
+          <include syntax="self" collection="generics" optional="true" />
+          <scope name="rust.keyword.modifier">
+            <expression>\b(for)\b</expression>
+            <capture number="1" name="rust.keyword.modifier" />
+          </scope>
+          <scope name="rust.identifier.type.struct">
+            <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+            <capture number="1" name="rust.identifier.type.struct" />
+          </scope>
+          <include syntax="self" collection="generics" optional="true" />
+          <scope name="rust.block.implementation">
+            <starts-with>
+              <expression>\{</expression>
+              <capture number="0" name="rust.bracket" />
+            </starts-with>
+            <ends-with>
+              <expression>\}</expression>
+              <capture number="0" name="rust.bracket" />
+            </ends-with>
+            <subscopes>
+              <include syntax="self" collection="method-definition" />
+            </subscopes>
+          </scope>
+        </subscopes>
+      </scope>
+      <!-- !Methods -->
+      <scope name="rust.definition.implementation">
+        <symbol type="category">
+          <context behavior="subtree" />
+          <display-name>
+            <component variable="name" append=" Methods" />
+          </display-name>
+        </symbol>
+        <starts-with>
+          <expression>\b(impl)\b(?![^\{]*\bfor\b)</expression>
+          <capture number="1" name="rust.keyword.construct" />
         </starts-with>
         <ends-with />
         <subscopes anchored="true">
@@ -381,50 +432,16 @@
           </scope>
         </subscopes>
       </scope>
-      <!-- <scope name="rust.definition.implementation.interface">
-        <symbol>
-          <context behavior="next" group-by-name="true" foldable="false" />
-        </symbol>
-        <starts-with>
-          <expression>(impl)</expression>
-          <capture number="0" name="rust.keyword.construct" />
-        </starts-with>
-        <ends-with />
-        <subscopes anchored="true">
-          <include syntax="self" collection="types" />
-          <include syntax="self" collection="generics" optional="true" />
-          <scope name="rust.keyword.modifier">
-            <expression>\b(for)\b</expression>
-            <capture number="1" name="rust.keyword.modifier" />
-          </scope>
-          <scope name="rust.identifier.type.struct">
-            <expression>\b([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
-            <capture number="1" name="rust.identifier.type.struct.name" />
-          </scope>
-          <include syntax="self" collection="generics" optional="true" />
-          <scope name="rust.block.implementation">
-            <starts-with>
-              <expression>\{</expression>
-              <capture number="0" name="rust.bracket" />
-            </starts-with>
-            <ends-with>
-              <expression>\}</expression>
-              <capture number="0" name="rust.bracket" />
-            </ends-with>
-            <subscopes>
-              <include syntax="self" collection="method-definition" />
-            </subscopes>
-          </scope>
-        </subscopes>
-      </scope> -->
-      <scope name="rust.definition.interface">
+      
+      <!-- !Traits -->
+      <scope name="rust.definition.protocol">
         <symbol type="interface">
           <context behavior="subtree" foldable="false" />
         </symbol>
         <starts-with>
           <expression>\b(?:(pub)\s+)?(trait)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
           <capture number="1" name="rust.keyword.modifier.visibility" />
-          <capture number="2" name="rust.keyword.construct.interface" />
+          <capture number="2" name="rust.keyword.construct.protocol" />
           <capture number="3" name="rust.identifier.type.protocol.name" />
         </starts-with>
         <ends-with />
@@ -450,10 +467,11 @@
           <context behavior="subtree" foldable="false" />
         </symbol>
         <starts-with>
-          <expression>\b(?:(pub)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <expression>\b(?:(pub)\s+)?(?:(const)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
           <capture number="1" name="rust.keyword.modifier.visibility" />
-          <capture number="2" name="rust.keyword.construct" />
-          <capture number="3" name="rust.identifier.method.name" />
+          <capture number="2" name="rust.keyword.modifier.mutability" />
+          <capture number="3" name="rust.keyword.construct" />
+          <capture number="4" name="rust.identifier.method.name" />
         </starts-with>
         <ends-with />
         <subscopes anchored="true">
@@ -861,7 +879,7 @@
           <expression>\b-?[0-9][0-9_]*(?:[iu](?:8|16|32|64|128|size))?\b</expression>
       </scope>
       <scope name="rust.value.number.hexadecimal">
-        <expression>\b0[xX][a-fA-F0-9]+\b</expression>
+        <expression>\b0[xX][a-fA-F0-9][a-fA-F0-9_]*\b</expression>
       </scope>
       <scope name="rust.value.number.octal">
         <expression>\b0[0-7]+\b</expression>
