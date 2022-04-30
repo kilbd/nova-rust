@@ -20,6 +20,29 @@
     "filesystem": "readwrite"
   },
 
+  "commands": {
+    "editor": [
+      {
+        "title": "Rename Symbol",
+        "command": "com.kilb.rust.rename",
+        "when": "editorSyntax == 'rust'"
+      },
+      {
+        "title": "Restart Rust Analyzer",
+        "command": "com.kilb.rust.restart",
+        "when": "editorSyntax == 'rust'"
+      }
+    ],
+    "text": [
+      {
+        "title": "Rename Symbol",
+        "command": "com.kilb.rust.rename",
+        "shortcut": "f2",
+        "when": "editorSyntax == 'rust'"
+      }
+    ]
+  },
+
   "config": [
     {
       "title": "Formatting",

@@ -34,6 +34,11 @@ export async function activate() {
       }
     }
   })
+  nova.commands.register('com.kilb.rust.rename', (editor: TextEditor) => {
+    editor.selectWordsContainingCursors()
+    console.log(`rename ${editor.selectedText}`)
+  })
+  nova.commands.register('com.kilb.rust.restart', () => langServer?.restart())
 }
 
 export function deactivate() {
