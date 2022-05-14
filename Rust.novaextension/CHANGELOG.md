@@ -1,3 +1,11 @@
+## Version 2.0.2
+
+### Fixed
+
+- Method parsing no longer broken by `async` keyword
+- Generics now parsed in return types
+- Keywords parsed in generics and return types
+
 ## Version 2.0.1
 
 ### Improved
