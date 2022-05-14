@@ -467,11 +467,12 @@
           <context behavior="subtree" foldable="false" />
         </symbol>
         <starts-with>
-          <expression>\b(?:(pub)\s+)?(?:(const)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
+          <expression>\b(?:(pub)\s+)?(?:(async)\s+)?(?:(const)\s+)?(fn)\s+([a-zA-Z_][a-zA-Z0-9_]*)\b</expression>
           <capture number="1" name="rust.keyword.modifier.visibility" />
-          <capture number="2" name="rust.keyword.modifier.mutability" />
-          <capture number="3" name="rust.keyword.construct" />
-          <capture number="4" name="rust.identifier.method.name" />
+          <capture number="2" name="rust.keyword.modifier.concurrency" />
+          <capture number="3" name="rust.keyword.modifier.mutability" />
+          <capture number="4" name="rust.keyword.construct" />
+          <capture number="5" name="rust.identifier.method.name" />
         </starts-with>
         <ends-with />
         <subscopes anchored="true">
@@ -550,6 +551,7 @@
         </ends-with>
         <subscopes>
           <include syntax="self" collection="generics" />
+          <include syntax="self" collection="keywords" />
           <include syntax="self" collection="lifetimes" />
           <include syntax="self" collection="qualified-types" />
           <include syntax="self" collection="types" />
@@ -787,8 +789,10 @@
           <capture number="1" name="rust.bracket" />
         </ends-with>
         <subscopes>
+          <include syntax="self" collection="keywords" />
           <include syntax="self" collection="qualified-types" />
           <include syntax="self" collection="types" />
+          <include syntax="self" collection="generics" />
         </subscopes>
       </scope>
     </collection>
