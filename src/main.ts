@@ -5,6 +5,7 @@ import {
   getLatestBinary,
   replaceBinary,
 } from './server-install'
+import { rename } from './rename'
 
 let langServer: RustLanguageServer | null = null
 
@@ -34,10 +35,7 @@ export async function activate() {
       }
     }
   })
-  nova.commands.register('com.kilb.rust.rename', (editor: TextEditor) => {
-    editor.selectWordsContainingCursors()
-    console.log(`rename ${editor.selectedText}`)
-  })
+  nova.commands.register('com.kilb.rust.rename', rename)
   nova.commands.register('com.kilb.rust.restart', () => langServer?.restart())
 }
 
