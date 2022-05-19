@@ -35,7 +35,9 @@ export async function activate() {
       }
     }
   })
-  nova.commands.register('com.kilb.rust.rename', rename)
+  nova.commands.register('com.kilb.rust.rename', (editor: TextEditor) =>
+    rename(editor, langServer)
+  )
   nova.commands.register('com.kilb.rust.restart', () => langServer?.restart())
 }
 

@@ -1,4 +1,9 @@
-async function rename(editor: TextEditor) {
+import { RustLanguageServer } from './rust-lang-server'
+
+async function rename(
+  editor: TextEditor,
+  langServer: RustLanguageServer | null
+) {
   const position = editor.selectedRange
   // Commenting out next few lines but keeping in case they're later useful.
   // Nova only recognizes something as a symbol where it is defined. Users will
@@ -17,7 +22,16 @@ async function rename(editor: TextEditor) {
     console.log('Rename aborted by user.')
     return
   }
-  console.log(newName)
+  try {
+    let resp = await langServer?.client?.sendRequest('textDocument/rename', {
+      newName: newName,
+      textDocument: { uri: editor.document.uri },
+      position: indexToPosition(editor.document, position.start),
+    })
+    console.log(resp)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 function askForNewName(oldName: string): Promise<string> {
@@ -34,6 +48,20 @@ function askForNewName(oldName: string): Promise<string> {
       }
     )
   })
+}
+
+function indexToPosition(document: TextDocument, index: number): Position {
+  const docText = document.getTextInRange(new Range(0, index))
+  const matches = docText.match(new RegExp(document.eol, 'g')) || []
+  return {
+    line: matches.length,
+    character: docText.length - docText.lastIndexOf(document.eol),
+  }
+}
+
+interface Position {
+  line: number
+  character: number
 }
 
 export { rename }
