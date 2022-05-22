@@ -15,6 +15,9 @@ This extension assumes you have common Rust tools installed on your Mac:
 
 The best way to install these requirements and keep them updated is by using the [rustup](https://rustup.rs/) tool. Copy the command at that link into a terminal and run it. Rustup also allows you to switch between Rust versions (e.g., stable or nightly). In-depth documentation on how to use it can be found [here](https://rust-lang.github.io/rustup/).
 
+> **Note**
+> Rust Analyzer expects your workspace to contain a `Cargo.toml` or a `rust-project.json` to describe your dependencies. This extension won't launch if these files are missing.
+
 ## Usage
 
 Syntax highlighting, completion assistance from Rust Analyzer, and error checking happen automatically when you open a Rust project. You can find errors and warnings in Nova's **Issues** sidebar and the editor gutter (checks currently happen after each save). When enabled (_see "Configuration" below_), your documents can be automatically formatted using Rustfmt whenever you save them.
@@ -28,6 +31,10 @@ View descriptions or type info by hovering your mouse cursor over identifiers.
 
 Right click an identifier and select **Jump to Definition** from the menu to be taken to the file location where the selected symbol is defined.
 ![Selecting 'Jump to Definition' from the right-click menu to navigate to the definition of the symbol.](https://github.com/kilbd/nova-rust/blob/main/img/jump_to_def.gif?raw=true)
+
+### Rename Symbol
+
+With your cursor over the symbol to rename, press F2 or select the **Rename Symbol** command from the right-click menu or from the Command Palette. Enter a new name for the symbol.
 
 ## Configuration
 
