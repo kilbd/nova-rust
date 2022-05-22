@@ -1,3 +1,14 @@
+## Version 2.1.0
+
+### New
+
+- Rename Symbol command - can be triggered with F2 key like VS Code
+- Restart Rust Analyzer command - for when RA seems wonky
+
+### Fixed
+
+- Activates extension for `rust-project.json` in workspace
+
 ## Version 2.0.2
 
 ### Fixed
