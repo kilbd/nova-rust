@@ -23,12 +23,12 @@ async function rename(
     return
   }
   try {
-    let resp = await langServer?.client?.sendRequest('textDocument/rename', {
+    const resp = (await langServer?.client?.sendRequest('textDocument/rename', {
       newName: newName,
       textDocument: { uri: editor.document.uri },
       position: indexToPosition(editor.document, position.start),
-    })
-    console.log(resp)
+    })) as WorkspaceEdit
+    applyWorkspaceEdit(resp)
   } catch (err) {
     console.error(err)
   }
@@ -59,9 +59,65 @@ function indexToPosition(document: TextDocument, index: number): Position {
   }
 }
 
+function positionToIndex(documentLines: string[], position: Position): number {
+  let prevLinesLength = 0
+  for (let i = 0; i < position.line; i++) {
+    prevLinesLength += documentLines[i].length
+  }
+  return prevLinesLength + position.character
+}
+
+async function applyWorkspaceEdit(edit: WorkspaceEdit) {
+  for (let doc of edit.documentChanges) {
+    const editor = await nova.workspace.openFile(doc.textDocument.uri)
+    if (!editor) continue
+    const lines = editor.document
+      .getTextInRange(new Range(0, editor.document.length))
+      .split(editor.document.eol)
+      .map((line) => line + editor.document.eol)
+    editor.edit((edits: TextEditorEdit) => {
+      // Work in reverse order so edits don't throw off range indexes
+      // for subsequent edits
+      for (let change of doc.edits.reverse()) {
+        edits.replace(
+          new Range(
+            positionToIndex(lines, change.range.start),
+            positionToIndex(lines, change.range.end)
+          ),
+          change.newText
+        )
+      }
+    })
+  }
+}
+
 interface Position {
   line: number
   character: number
+}
+
+interface LspRange {
+  start: Position
+  end: Position
+}
+
+interface DocumentEdit {
+  range: LspRange
+  newText: string
+}
+
+interface DocumentVersion {
+  uri: string
+  version: number
+}
+
+interface DocumentChange {
+  textDocument: DocumentVersion
+  edits: DocumentEdit[]
+}
+
+interface WorkspaceEdit {
+  documentChanges: DocumentChange[]
 }
 
 export { rename }
