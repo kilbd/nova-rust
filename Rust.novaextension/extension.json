@@ -12,7 +12,10 @@
 
   "main": "main.js",
 
-  "activationEvents": ["onWorkspaceContains:Cargo.toml"],
+  "activationEvents": [
+    "onWorkspaceContains:Cargo.toml",
+    "onWorkspaceContains:rust-project.json"
+  ],
 
   "entitlements": {
     "process": true,
