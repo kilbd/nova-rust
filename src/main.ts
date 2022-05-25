@@ -39,6 +39,8 @@ export async function activate() {
     rename(editor, langServer)
   )
   nova.commands.register('com.kilb.rust.restart', () => langServer?.restart())
+  nova.fs.watch('**/Cargo.toml', () => langServer?.restart())
+  nova.fs.watch('**/rust-project.json', () => langServer?.restart())
 }
 
 export function deactivate() {
