@@ -154,11 +154,11 @@
     
     <!-- !Comments -->
     <collection name="comments">
-      <scope name="rust.comment.single">
+      <scope name="rust.comment.single" spell-check="true">
         <expression>//(?:$|([^/!].*)$)</expression>
         <capture number="1" name="rust.comment.single.content" />
       </scope>
-      <scope name="rust.comment.multiline">
+      <scope name="rust.comment.multiline" spell-check="true">
         <symbol type="comment">
           <context behavior="subtree" />
         </symbol>
@@ -169,7 +169,7 @@
           <expression>\*/</expression>
         </ends-with>
       </scope>
-      <scope name="rust.string.docstring">
+      <scope name="rust.string.docstring" spell-check="true">
         <expression>//[/!](.*)$</expression>
         <capture number="1" name="rust.string.docstring.content" />
       </scope>
@@ -814,7 +814,7 @@
     <!-- !Values -->
     <collection name="values">
       <!-- Strings -->
-      <scope name="rust.string">
+      <scope name="rust.string" spell-check="true">
         <starts-with>
           <expression>&quot;</expression>
         </starts-with>
@@ -840,7 +840,7 @@
           </scope>
         </subscopes>
       </scope>
-      <scope name="rust.string.raw">
+      <scope name="rust.string.raw" spell-check="true">
         <starts-with>
           <expression>\br&quot;</expression>
         </starts-with>
@@ -848,7 +848,7 @@
           <expression>&quot;</expression>
         </ends-with>
       </scope>
-      <scope name="rust.string.raw.quote">
+      <scope name="rust.string.raw.quote" spell-check="true">
         <starts-with>
           <expression>\br\#+&quot;</expression>
         </starts-with>
@@ -856,7 +856,7 @@
           <expression>&quot;\#+</expression>
         </ends-with>
       </scope>
-      <scope name="rust.string.byte">
+      <scope name="rust.string.byte" spell-check="true">
         <starts-with>
           <expression>\bb&quot;</expression>
         </starts-with>
