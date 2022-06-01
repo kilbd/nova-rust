@@ -118,5 +118,26 @@
         }
       ]
     }
-  ]
+  ],
+  "taskTemplates": {
+    "cargo-test": {
+      "name": "Cargo Test",
+      "description": "Runs tests with `cargo test`",
+      "tasks": {
+        "run": {
+          "shell": true,
+          "command": "cargo",
+          "args": ["test", "$(Config:com.kilb.rust.cargo-test.args)"]
+        }
+      },
+      "config": [
+        {
+          "key": "com.kilb.rust.cargo-test.args",
+          "title": "Additional Arguments",
+          "description": "Arguments to pass to `cargo test`.",
+          "type": "string"
+        }
+      ]
+    }
+  }
 }
