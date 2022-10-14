@@ -90,6 +90,18 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "title": "Environment",
+      "type": "section",
+      "children": [
+        {
+          "key": "com.kilb.rust.env-vars",
+          "title": "Environment Variables",
+          "description": "These values are passed to Rust Analyzer and tasks created with the Cargo template. Each entry should have the format VARIABLENAME=somevalue. Values here will apply to any Rust project, and are useful for global settings like RUST_BACKTRACE=1.",
+          "type": "stringArray"
+        }
+      ]
     }
   ],
   "configWorkspace": [
@@ -115,6 +127,18 @@
           "title": "Additional Arguments",
           "description": "Arguments to pass to the Cargo lint command you selected.",
           "type": "string"
+        }
+      ]
+    },
+    {
+      "title": "Environment",
+      "type": "section",
+      "children": [
+        {
+          "key": "com.kilb.rust.env-vars",
+          "title": "Environment Variables",
+          "description": "These values are passed to Rust Analyzer and tasks created with the Cargo template. Each entry should have the format VARIABLENAME=somevalue. Values here will apply only to this project and can override global settings. A useful example is setting DATABASE_URL which is required by the sqlx::query macro.",
+          "type": "stringArray"
         }
       ]
     }
