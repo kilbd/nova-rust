@@ -42,7 +42,7 @@ export async function activate() {
   )
   nova.commands.register('com.kilb.rust.restart', () => langServer?.restart())
   nova.assistants.registerTaskAssistant(cargoTasks, {
-    identifer: 'com.kilb.rust.assistants.cargo',
+    identifier: 'com.kilb.rust.assistants.cargo',
     name: 'Cargo',
   })
   nova.fs.watch('**/Cargo.toml', () => langServer?.restart())
