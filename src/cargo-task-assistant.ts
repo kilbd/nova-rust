@@ -1,14 +1,35 @@
+import { envVarObject, onPreferenceChange } from './preference-resolver'
+
 class CargoTaskAssistant {
+  private envVars: Object = {}
+
+  constructor() {
+    onPreferenceChange('com.kilb.rust.env-vars', true, (varList: string[]) => {
+      this.envVars = envVarObject(varList)
+    })
+  }
+
   // Required, but unused, method. Tasks are configured in extension.json.
   provideTasks(): AssistantArray<Task> {
     return []
   }
 
   resolveTaskAction(context: TaskActionResolveContext<any>): TaskProcessAction {
-    console.log(context.config)
+    let args: string[] = []
+    let cmdPref = 'com.kilb.rust.cargo.build.subcommand'
+    let argPref = 'com.kilb.rust.cargo.build.args'
+    if (context.action === Task.Run) {
+      cmdPref = 'com.kilb.rust.cargo.run.subcommand'
+      argPref = 'com.kilb.rust.cargo.run.args'
+    }
+    args.push(context.config?.get(cmdPref) as string)
+    let comArgs = context.config?.get(argPref)
+    if (comArgs) args.push(comArgs as string)
+
     return new TaskProcessAction('cargo', {
       shell: true,
-      args: ['build'],
+      args: args,
+      env: this.envVars as { [key: string]: string },
     })
   }
 }
