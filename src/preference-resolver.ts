@@ -31,12 +31,16 @@ function onPreferenceChange(
 function envVarObject(envs: string[]): Object {
   let map = new Map()
   envs.forEach((e) => {
-    let env = e.trim()
-    let splitIndex = env.indexOf('=')
-    map.set(
-      env.substring(0, splitIndex).trim(),
-      env.substring(splitIndex + 1).trim()
-    )
+    if (e) {
+      let env = e.trim()
+      let splitIndex = env.indexOf('=')
+      if (splitIndex > 0) {
+        map.set(
+          env.substring(0, splitIndex).trim(),
+          env.substring(splitIndex + 1).trim()
+        )
+      }
+    }
   })
   return Object.fromEntries(map)
 }

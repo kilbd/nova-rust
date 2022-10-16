@@ -1,10 +1,11 @@
-import { onPreferenceChange } from './preference-resolver'
+import { envVarObject, onPreferenceChange } from './preference-resolver'
 
 export class RustLanguageServer {
   private languageClient: LanguageClient | null = null
   private crashAlert: Disposable | null = null
   private lintCommand = 'check'
   private lintArgs: string[] = []
+  private envVars: Object = {}
 
   constructor() {
     onPreferenceChange(
@@ -25,6 +26,10 @@ export class RustLanguageServer {
         }
       }
     )
+    onPreferenceChange('com.kilb.rust.env-vars', true, (varList: string[]) => {
+      this.envVars = envVarObject(varList)
+      this.restart()
+    })
   }
 
   get client(): LanguageClient | null {
@@ -87,6 +92,9 @@ export class RustLanguageServer {
       // The set of document syntaxes for which the server is valid
       syntaxes: ['rust'],
       initializationOptions: {
+        cargo: {
+          extraEnv: this.envVars,
+        },
         checkOnSave: {
           command: this.lintCommand,
           extraArgs: this.lintArgs,
