@@ -1,3 +1,15 @@
+## Version 2.2.0
+
+### New
+
+- Task template for Cargo commands
+- Extension and workspace preferences for adding environment variables. Values are shared with the Cargo task template AND Rust Analyzer.
+
+### Improved
+
+- Rust Analyzer restarts when there are changes to `Cargo.toml` or `rust-project.json`
+- Comments and strings are now spell-checked (thank you **@illegalhex**!)
+
 ## Version 2.1.0
 
 ### New
