@@ -1,4 +1,8 @@
-import { envVarObject, onPreferenceChange } from './preference-resolver'
+import {
+  envVarObject,
+  onPreferenceChange,
+  splitArgString,
+} from './preference-resolver'
 
 export class RustLanguageServer {
   private languageClient: LanguageClient | null = null
@@ -21,7 +25,7 @@ export class RustLanguageServer {
       false,
       (lintArgs: string | null) => {
         if (lintArgs) {
-          this.lintArgs = lintArgs.split(' ')
+          this.lintArgs = splitArgString(lintArgs)
           this.restart()
         }
       }

@@ -1,4 +1,8 @@
-import { envVarObject, onPreferenceChange } from './preference-resolver'
+import {
+  envVarObject,
+  onPreferenceChange,
+  splitArgString,
+} from './preference-resolver'
 
 class CargoTaskAssistant {
   private envVars: Object = {}
@@ -24,7 +28,9 @@ class CargoTaskAssistant {
     }
     args.push(context.config?.get(cmdPref) as string)
     let comArgs = context.config?.get(argPref)
-    if (comArgs) args.push(comArgs as string)
+    console.log(comArgs)
+    if (comArgs) args = args.concat(splitArgString(comArgs as string))
+    console.log(args)
 
     return new TaskProcessAction('cargo', {
       shell: true,
