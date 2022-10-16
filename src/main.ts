@@ -1,3 +1,4 @@
+import { CargoTaskAssistant } from './cargo-task-assistant'
 import { RustFormatter } from './rust-formatter'
 import { RustLanguageServer } from './rust-lang-server'
 import {
@@ -13,6 +14,7 @@ export async function activate() {
   // Do work when the extension is activated
   langServer = new RustLanguageServer()
   let formatter = new RustFormatter()
+  let cargoTasks = new CargoTaskAssistant()
   nova.workspace.onDidAddTextEditor(async (editor: TextEditor) => {
     editor.onWillSave((editor: TextEditor) => {
       return formatter.format(editor)
@@ -39,6 +41,12 @@ export async function activate() {
     rename(editor, langServer)
   )
   nova.commands.register('com.kilb.rust.restart', () => langServer?.restart())
+  nova.assistants.registerTaskAssistant(cargoTasks, {
+    identifier: 'com.kilb.rust.assistants.cargo',
+    name: 'Cargo',
+  })
+  nova.fs.watch('**/Cargo.toml', () => langServer?.restart())
+  nova.fs.watch('**/rust-project.json', () => langServer?.restart())
 }
 
 export function deactivate() {

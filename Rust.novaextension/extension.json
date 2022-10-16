@@ -90,6 +90,18 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "title": "Environment",
+      "type": "section",
+      "children": [
+        {
+          "key": "com.kilb.rust.env-vars",
+          "title": "Environment Variables",
+          "description": "These values are passed to Rust Analyzer and tasks created with the Cargo template. Each entry should have the format VARIABLENAME=somevalue. Values here will apply to any Rust project, and are useful for global settings like RUST_BACKTRACE=1.",
+          "type": "stringArray"
+        }
+      ]
     }
   ],
   "configWorkspace": [
@@ -117,6 +129,69 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "title": "Environment",
+      "type": "section",
+      "children": [
+        {
+          "key": "com.kilb.rust.env-vars",
+          "title": "Environment Variables",
+          "description": "These values are passed to Rust Analyzer and tasks created with the Cargo template. Each entry should have the format VARIABLENAME=somevalue. Values here will apply only to this project and can override global settings. A useful example is setting DATABASE_URL which is required by the sqlx::query macro.",
+          "type": "stringArray"
+        }
+      ]
     }
-  ]
+  ],
+  "taskTemplates": {
+    "cargo": {
+      "name": "Cargo",
+      "description": "Easily set up common Cargo commands.",
+      "tasks": {
+        "build": {
+          "resolve": "com.kilb.rust.assistants.cargo"
+        },
+        "run": {
+          "resolve": "com.kilb.rust.assistants.cargo"
+        },
+        "clean": {
+          "shell": true,
+          "command": "cargo",
+          "args": ["clean"]
+        }
+      },
+      "config": [
+        {
+          "key": "com.kilb.rust.cargo.build.subcommand",
+          "title": "Build Subcommand",
+          "description": "The Cargo command to run for Build task.",
+          "type": "enum",
+          "values": ["build", "test", "bench"],
+          "default": "build",
+          "radio": true
+        },
+        {
+          "key": "com.kilb.rust.cargo.build.args",
+          "title": "Additional Arguments",
+          "description": "Arguments to pass to the selected Cargo command for Build task.",
+          "type": "string"
+        },
+        {
+          "key": "com.kilb.rust.cargo.run.subcommand",
+          "title": "Run Subcommand",
+          "description": "The Cargo command to run for Run task.",
+          "type": "enum",
+          "values": ["run", "test", "bench"],
+          "default": "run",
+          "radio": true
+        },
+        {
+          "key": "com.kilb.rust.cargo.run.args",
+          "title": "Additional Arguments",
+          "description": "Arguments to pass to the selected Cargo command for Run task.",
+          "type": "string"
+        }
+      ]
+    }
+  }
 }
