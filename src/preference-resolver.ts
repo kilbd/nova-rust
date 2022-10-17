@@ -30,7 +30,7 @@ function onPreferenceChange(
 // an object that can be given to processes.
 function envVarObject(envs: string[]): Object {
   let map = new Map()
-  envs.forEach((e) => {
+  envs?.forEach((e) => {
     if (e) {
       let env = e.trim()
       let splitIndex = env.indexOf('=')
