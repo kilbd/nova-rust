@@ -1,3 +1,9 @@
+## Version 2.2.1
+
+### Fixed
+
+- Fixes activation error when new preferences are empty
+
 ## Version 2.2.0
 
 ### New

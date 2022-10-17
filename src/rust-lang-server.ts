@@ -30,10 +30,14 @@ export class RustLanguageServer {
         }
       }
     )
-    onPreferenceChange('com.kilb.rust.env-vars', true, (varList: string[]) => {
-      this.envVars = envVarObject(varList)
-      this.restart()
-    })
+    onPreferenceChange(
+      'com.kilb.rust.env-vars',
+      true,
+      (varList: string[] | null) => {
+        this.envVars = envVarObject(varList || [])
+        this.restart()
+      }
+    )
   }
 
   get client(): LanguageClient | null {

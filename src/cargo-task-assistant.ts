@@ -8,9 +8,13 @@ class CargoTaskAssistant {
   private envVars: Object = {}
 
   constructor() {
-    onPreferenceChange('com.kilb.rust.env-vars', true, (varList: string[]) => {
-      this.envVars = envVarObject(varList)
-    })
+    onPreferenceChange(
+      'com.kilb.rust.env-vars',
+      true,
+      (varList: string[] | null) => {
+        this.envVars = envVarObject(varList || [])
+      }
+    )
   }
 
   // Required, but unused, method. Tasks are configured in extension.json.
