@@ -10,6 +10,10 @@
     <extension priority="1.0">rs</extension>
   </detectors>
   
+  <tree-sitter>
+    <highlights />
+  </tree-sitter>
+  
   <indentation>
     <increase>
       <expression>(\{[^}\"']*$)|(\[[^\]\"']*$)|(\([^)\"']*$)</expression>
