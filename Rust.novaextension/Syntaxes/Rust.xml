@@ -13,6 +13,7 @@
   <tree-sitter>
     <highlights />
     <symbols path="symbols/symbols.scm" />
+    <text-checking />
   </tree-sitter>
   
   <indentation>
