@@ -23,17 +23,16 @@
 
 ; Methods
 ((impl_item
-    type: (type_identifier) @name @displayname
-    !trait) @subtree
-(#set! role category)
-(#append! @displayname " methods"))
-
-((impl_item
-    trait: (_)) @displayname.target @subtree
+    type: (type_identifier) @name
+    !trait) @subtree @displayname.target
 (#set! role category)
 (#set! displayname.query "symbols/impl_item.scm"))
 
-
+((impl_item
+    trait: (_)) @name.target @displayname.target @subtree
+(#set! role category)
+(#set! name.query "symbols/impl_trait_name.scm")
+(#set! displayname.query "symbols/impl_trait_display.scm"))
 
 ; ((impl_item
 ;     body: (declaration_list
