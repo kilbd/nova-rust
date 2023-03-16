@@ -21,6 +21,16 @@
         name: (identifier) @name) @subtree))
 (#set! role enum-member))
 
+; Traits
+((trait_item
+    name: (type_identifier) @name) @subtree
+(#set! role interface))
+
+; Type
+((type_item
+    name: (type_identifier) @name) @subtree
+(#set! role type))
+
 ; Methods
 ((impl_item
     type: (type_identifier) @name
@@ -44,3 +54,8 @@
 ((function_item
     name: (identifier) @name) @subtree
 (#set! role function-or-method))
+
+; Modules - mostly useful for bundling test functions
+((mod_item
+    name: (identifier) @name) @subtree
+(#set! role package))
