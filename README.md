@@ -10,28 +10,43 @@ Nova users can install this extension from Nova's [Extension Library](https://ex
 
 ### Requirements
 
-To help develop this extension, you'll need the Nova app, of course.
-
-To build the scripts for this extension, you will need [Node](https://nodejs.org/) installed (and the npm package manager that comes with it).
+- The Nova app, of course.
+- [Node](https://nodejs.org/) (and the **npm** package manager that comes with it): to build the scripts for this extension
+- **XCode**: to build the Tree Sitter library (Command Line Tools from Apple may suffice)
 
 ### Setting Up the Dev Environment
 
+This project depends on the `tree-sitter-rust` project, so you'll need to pull down the submodule when you clone or after cloning:
+
+```shell
+git clone --recurse-submodules https://github.com/kilbd/nova-rust
+# OR after cloning you can run
+git submodule update --init --recursive
+```
+
 Start by running the `update_server.sh` script to download the Rust Analyzer binary, then rename it manually:
 
-```bash
-$ cd Rust.novaextension/bin/
-$ ./update_server.sh
-$ mv rust-analyzer-new rust-analyzer
-$ cd ../..
+```shell
+cd Rust.novaextension/bin/
+./update_server.sh
+mv rust-analyzer-new rust-analyzer
+cd ../..
 ```
 
 This is done for users automatically, but in Nova's Developer Mode for extensions any file change triggers a reload of the extension, and thus you'd get stuck in an endless loop. In Dev Mode, I have the extension skip attempts to update Rust Analyzer.
 
+While you're running scripts, you might as well build the Tree Sitter library used for syntax highlighting and symbols. Then move the library to the `Syntaxes` folder. From the project root, run:
+
+```shell
+./tree-sitter/compile_parser.sh "$(pwd)/tree-sitter/tree-sitter-rust" /Applications/Nova.app
+mv ./tree-sitter/libtree-sitter-rust.dylib ./Rust.novaextension/Syntaxes/libtree-sitter-rust.dylib
+```
+
 Now you can install dependencies and build the scripts:
 
-```bash
-$ npm install
-$ npm run build
+```shell
+npm install
+npm run build
 ```
 
 After the scripts are transpiled, you can test the extension in Nova by selecting **Extensions -> Activate Project as Extension**. Open a Rust project to see it in action. You can monitor logs and errors by selecting **Extensions -> Show Extension Console** from the menus in the Rust project.
