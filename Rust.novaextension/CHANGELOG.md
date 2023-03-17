@@ -1,3 +1,9 @@
+## Version 2.3.0
+
+### New
+
+- Support for Tree Sitter language parsing introduced in Nova 10
+
 ## Version 2.2.1
 
 ### Fixed
