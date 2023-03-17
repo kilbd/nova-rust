@@ -3,4 +3,8 @@ node_modules
 
 Rust.novaextension/Scripts
 Rust.novaextension/bin/rust-analyzer
+Rust.novaextension/Syntaxes/libtree-sitter-rust.dylib
+
+tree-sitter/build
+
 coverage
