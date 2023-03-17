@@ -154,7 +154,7 @@
 (escape_sequence) @string.escape
 
 (attribute_item) @processing.attribute
-(attr_item
+(attribute
   arguments: (token_tree (string_literal) @processing.attribute))
 (inner_attribute_item) @processing.attribute
 
