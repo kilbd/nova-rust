@@ -1,5 +1,6 @@
 #!/bin/bash
-
+set -e
+set -o pipefail
 # As of 2023-03-18, `rust-analyzer --version` outputs the following format:
 # rust-analyzer 0.3.1435-standalone (f1e51afa4 2023-03-12)
 # We want to compare the commit SHA to check for new version
