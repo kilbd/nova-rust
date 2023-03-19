@@ -37,7 +37,7 @@ export function getLatestBinary(): Promise<boolean> {
       let data: GitHubReleaseData[] = []
       try {
         let ghResponse = await fetch(
-          'https://api.github.com/repos/rust-analyzer/rust-analyzer/releases',
+          'https://api.github.com/repos/rust-lang/rust-analyzer/releases',
           {
             method: 'GET',
             headers: { Accept: 'application/vnd.github.v3+json' },
@@ -57,13 +57,12 @@ export function getLatestBinary(): Promise<boolean> {
         // If this version query failed, the update should not proceed.
         resolve(false)
       }
-      raVersion =
-        data.find(
-          (item) =>
-            !item.draft && !item.prerelease && item.tag_name !== 'nightly'
-        )?.name || 'none'
+      let latest = data.find(
+        (item) => !item.draft && !item.prerelease && item.tag_name !== 'nightly'
+      )
+      raVersion = latest?.target_commitish || 'none'
+      console.log(`Latest Rust Analyzer version: ${latest?.name}`)
     }
-    console.log(`Latest Rust Analyzer version: ${raVersion}`)
     // Replacing a file while running in dev mode causes the extension to
     // restart. Replacing a file during activation gets you stuck in a loop.
     if (nova.inDevMode()) {
@@ -104,4 +103,5 @@ interface GitHubReleaseData {
   name: string
   prerelease: boolean
   tag_name: string
+  target_commitish: string
 }
