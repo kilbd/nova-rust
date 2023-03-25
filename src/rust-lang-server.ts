@@ -9,7 +9,7 @@ export class RustLanguageServer {
   private crashAlert: Disposable | null = null
   private lintCommand = 'check'
   private lintArgs: string[] = []
-  private envVars: Object = {}
+  private envVars: Record<string, string> = {}
 
   constructor() {
     onPreferenceChange(
@@ -77,6 +77,11 @@ export class RustLanguageServer {
     }
 
     let path = `${nova.extension.path}/bin/rust-analyzer`
+    // For use when extension-managed Rust Analyzer is malfunctioning
+    if (this.envVars.hasOwnProperty('RA_PATH')) {
+      path = this.envVars['RA_PATH']
+      console.log(`Using Rust Analyzer at path: ${path}`)
+    }
     // The Rust Analyzer binary won't exist when extension is first run
     // after installing.
     if (!nova.fs.access(path, nova.fs.F_OK + nova.fs.X_OK)) {

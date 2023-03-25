@@ -28,7 +28,7 @@ function onPreferenceChange(
 
 // Takes the string array of combined environment variable preferences, and returns
 // an object that can be given to processes.
-function envVarObject(envs: string[]): Object {
+function envVarObject(envs: string[]): Record<string, string> {
   let map = new Map()
   envs?.forEach((e) => {
     if (e) {

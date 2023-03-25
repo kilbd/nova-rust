@@ -5,7 +5,7 @@ import {
 } from './preference-resolver'
 
 class CargoTaskAssistant {
-  private envVars: Object = {}
+  private envVars: Record<string, string> = {}
 
   constructor() {
     onPreferenceChange(
