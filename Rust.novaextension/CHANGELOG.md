@@ -1,3 +1,11 @@
+## Version 2.3.1
+
+### Fixed
+
+- Rust Analyzer should no longer be replaced after download errors
+- Use more reliable commit SHA for update checks
+- Check `RA_PATH` env var in extension settings for custom Rust Analyzer path
+
 ## Version 2.3.0
 
 ### New
