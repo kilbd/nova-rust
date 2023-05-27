@@ -17,7 +17,7 @@ export class RustFormatter {
   format(editor: TextEditor): Promise<void> {
     return new Promise<void>((resolve, _reject) => {
       const savedDoc = editor.document.path
-      if (this.enabled && savedDoc?.substr(-3) === '.rs') {
+      if (this.enabled && savedDoc?.substring(savedDoc.length - 3) === '.rs') {
         const formatConfig = this.findFormatFile(
           savedDoc.substring(0, savedDoc.lastIndexOf('/'))
         )
@@ -78,7 +78,7 @@ export class RustFormatter {
     })
     // rustfmt config has the highest precedence
     if (fmtToml) {
-      return { isFmtFile: true, path: path }
+      return { isFmtFile: true, path: fmtToml }
     } else if (cargoToml) {
       return { isFmtFile: false, path: cargoToml }
     } else {
