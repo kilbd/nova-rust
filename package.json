@@ -1,6 +1,6 @@
 {
   "name": "nova-rust",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "private": true,
   "author": "Drew Kilb",
   "scripts": {

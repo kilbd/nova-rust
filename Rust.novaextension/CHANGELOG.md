@@ -1,3 +1,9 @@
+## Version 2.3.2
+
+### Fixed
+
+- Fixes format on save not picking up a `rustfmt.toml` config
+
 ## Version 2.3.1
 
 ### Fixed
