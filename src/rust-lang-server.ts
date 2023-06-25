@@ -63,7 +63,6 @@ export class RustLanguageServer {
         }
       })
       this.languageClient.stop()
-      nova.subscriptions.remove(this.languageClient)
       this.languageClient = null
     } else {
       this.start()
@@ -73,7 +72,6 @@ export class RustLanguageServer {
   start() {
     if (this.languageClient) {
       this.languageClient.stop()
-      nova.subscriptions.remove(this.languageClient)
     }
 
     let path = `${nova.extension.path}/bin/rust-analyzer`
@@ -141,9 +139,6 @@ export class RustLanguageServer {
 
     try {
       client.start()
-
-      // Add the client to the subscriptions to be cleaned up
-      nova.subscriptions.add(client)
       this.languageClient = client
     } catch (err) {
       // If the .start() method throws, it's likely because the path to the language server is invalid
@@ -161,7 +156,6 @@ export class RustLanguageServer {
     }
     if (this.languageClient) {
       this.languageClient.stop()
-      nova.subscriptions.remove(this.languageClient)
       this.languageClient = null
     }
   }
