@@ -1,3 +1,9 @@
+## Version 2.4.0
+
+### New
+
+- Adds code folding to Tree Sitter syntax definition
+
 ## Version 2.3.2
 
 ### Fixed
